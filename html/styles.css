@@ -1,0 +1,101 @@
+.board {
+	background-color: #005a40;
+}
+
+.title {
+	margin-bottom: 10px;
+	margin-top: 5px;
+	text-align: center;
+	font-size: large;
+	color: white;
+	text-shadow: 0.1em .1em 1px lightgrey;
+}
+
+.timer {
+	color: white;
+}
+
+.card {
+	border-width: 5px;
+	border-style: inset;
+	border-color: darkgray;
+	box-shadow: 5px -4px 4px 2px black;
+	width: 250px;
+	background-color: white;
+	cursor: move;
+	position: absolute;
+	z-index: 0;
+}
+
+.card-dragged {
+	border-color: red;
+}
+
+.cardImage {
+	width: 70%;
+	margin-top: 10px;
+	margin-left: 35px;
+}
+
+.cardText {
+	font-size:30px;
+	text-align: center;
+	padding: 5px;
+}
+
+.cardSoundIcon {
+}
+
+.cardSound {
+	width: 50px;
+}
+
+
+.box {
+	margin-top: 10px;
+	margin-left: 5px;
+	border-width: 2px;
+	border-style: dashed;
+	border-color: white;
+	width: 1024px;
+	height: 500px;
+	z-index: -1;
+}
+
+.play {
+	margin-left: 400px;	
+	position: absolute;	
+	z-index: 2;
+}
+
+.playshadow {
+	margin-left: 405px;
+	margin-top: 3px;
+	position: absolute;
+	z-index: 1;
+}
+
+.validate {
+	margin-left: 540px;	
+	position: absolute;	
+	z-index: 2;
+}
+
+.validateshadow {
+	margin-left: 545px;
+	margin-top: 3px;
+	position: absolute;
+	z-index: 1;
+}
+
+.footer {
+	width: 100%;
+	text-align: right;
+}
+
+.licence {
+	display: inline-block;
+	font-size: x-small;
+	margin-right: 5px;
+	margin-top: 30px;
+}
