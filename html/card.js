@@ -1,6 +1,4 @@
 // Card component with image, text and sound
-
-
 enyo.kind({
 	name: "FoodChain.Card",
 	kind: enyo.Control,
@@ -21,13 +19,9 @@ enyo.kind({
 		this.yChanged();
 	},
 	
-	// Rendering, force draggable property
+	// Rendering
 	rendered: function() {
 		this.inherited(arguments);
-		var node = this.hasNode();
-		if (node != null) {
-			node.draggable = true;
-		}
 	},
 	
 	// Card setup

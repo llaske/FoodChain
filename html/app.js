@@ -13,18 +13,15 @@ enyo.kind({
 			
 			{ name: "gamebox", classes: "box", ondrop: "drop", ondragover: "dragover", components: [] },
 			
-			{ name: "validate", kind: "Image", src: "images/validate.svg", classes: "validate", onenter: "showValidateShadow", onleave: "hideValidateShadow", ontap: "controlOrder" },
-			{ name: "validateshadow", kind: "Image", src: "images/validate_shadow.svg", classes: "validateshadow" },
-			{ name: "play", kind: "Image", src: "images/play.svg", classes: "play", onenter: "showPlayShadow", onleave: "hidePlayShadow", ontap: "play" },	
-			{ name: "playshadow", kind: "Image", src: "images/play_shadow.svg", classes: "playshadow" },
-			{ name: "pause", kind: "Image", src: "images/pause.svg", classes: "play", onenter: "showPauseShadow", onleave: "hidePauseShadow", ontap: "pause" },	
-			{ name: "pauseshadow", kind: "Image", src: "images/pause_shadow.svg", classes: "playshadow" },
-
+			{ name: "validate", kind: "ShadowButton", img: "validate", classes: "validate", ontap: "controlOrder" },
+			{ name: "play", kind: "ShadowButton", img: "play", classes: "play", ontap: "play" },	
+			{ name: "pause", kind: "ShadowButton", img: "pause", classes: "play", ontap: "pause" },	
+			{ name: "restart", kind: "ShadowButton", img: "restart", classes: "restart", ontap: "restart" },
+			{ name: "forward", kind: "ShadowButton", img: "forward", classes: "restart", ontap: "next" },
+			{ name: "home", kind: "ShadowButton", img: "home", classes: "home", ontap: "home" },
 			
-			{ classes: "footer", components: [
-				{ content: "Images and sounds CC BY-SA from", classes: "licence" },
-				{ tag: "a", attributes: {"href":"http://art4apps.org/"}, content: "Art4Apps", classes: "licence" }
-			]}
+			{ name: "winSound", kind: "HTML5.Audio", src: ["audio/applause.mp3", "audio/applause.ogg"], preload: "auto", autobuffer: true, controlsbar: false },
+			{ name: "lostSound", kind: "HTML5.Audio", src: ["audio/disappointed.mp3", "audio/disappointed.ogg"], preload: "auto", autobuffer: true, controlsbar: false }
 		]}		
 	],
 	
@@ -32,21 +29,27 @@ enyo.kind({
 	create: function() {
 		this.inherited(arguments);
 		
-		// Create cards
-		this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: "fish", x: 50, y: 50, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});
-		this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: "alligator", x: 300, y: 100, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});
-		this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: "shrimp", x: 500, y: 150, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});		
-		this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: "spider", x: 700, y: 200, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});				
+		// Compute the start chain
+		var size = 3;
+		this.chain = FoodChain.randomChain(size);
+		var mixed = FoodChain.mix(this.chain);
+		
+		// Display matching cards
+		var x = 10, y = 10;
+		for (var i = 0 ; i < mixed.length ; i++) {
+			this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: mixed[i], x: x, y: y, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});
+			x = x + 240;
+		}
 		
 		// Box handling
 		this.dragobject = null;
 		this.zmax = 0;	
 
 		// Button handling
-		this.$.validateshadow.hide();
-		this.$.pauseshadow.hide();
 		this.$.play.hide();
-		this.$.playshadow.hide();
+		this.$.restart.hide();
+		this.$.forward.hide();
+		this.$.home.hide();
 		
 		this.timecount = {mins:0, secs:0, tenth:0};
 		this.$.timer.start();
@@ -75,6 +78,7 @@ enyo.kind({
 	// Card drag start, change style to dragged
 	dragstart: function(s, e) {
 		s.addClass("card-dragged");
+		this.$.gamebox.addClass("box-dragging");
 		s.play();
 		this.dragobject = s;
 		this.dragx = e.clientX-s.x;
@@ -85,6 +89,7 @@ enyo.kind({
 	// Card drag end, change style to not dragged
 	dragfinish: function(s, e) {
 		s.removeClass("card-dragged");
+		this.$.gamebox.removeClass("box-dragging");
 	},
 	
 	// Drag over the box, allow dragging
@@ -109,35 +114,39 @@ enyo.kind({
 		this.zmax = this.zmax + 1;
 		card.applyStyle("z-index", this.zmax)
 	},
-
-	// Show/Hide shadow
-	showValidateShadow: function() {
-		this.$.validateshadow.show();
-	},
-
-	hideValidateShadow: function() {
-		this.$.validateshadow.hide();
-	},
-
-	showPlayShadow: function() {
-		this.$.playshadow.show();
-	},
-
-	hidePlayShadow: function() {
-		this.$.playshadow.hide();
-	},
-	
-	showPauseShadow: function() {
-		this.$.pauseshadow.show();
-	},
-
-	hidePauseShadow: function() {
-		this.$.pauseshadow.hide();
-	},
 	
 	// Validate cards order
 	controlOrder: function() {
-		console.log(this.$.gamebox.getControls());
+		// Get cards
+		var cards = [];
+		enyo.forEach(this.$.gamebox.getControls(), function(card) {
+			cards.push(card);
+		});	
+		
+		// Sort using x card position
+		cards = cards.sort(function (c1, c2) { return c1.x - c2.x; });
+		
+		// Check order
+		var win = true;
+		for (var i = 0 ; win && i < this.chain.length ; i++) {
+			if (cards[i].cardname != this.chain[i])
+				win = false;
+		}
+		
+		// Play win or loose sound	
+		console.log(win);
+		if (win) {
+			this.$.winSound.play();
+			this.$.gamebox.addClass("box-win");
+			this.$.home.show();
+			this.$.forward.show(); // TODO: Except if last level
+		}
+		else {
+			this.$.lostSound.play();
+			this.$.gamebox.addClass("box-lost");
+			this.$.home.show();
+			this.$.restart.show();
+		}
 	},
 	
 	// Resume game
@@ -149,9 +158,9 @@ enyo.kind({
 		
 		// Show pause button, hide play button
 		this.$.timer.resume();
-		this.$.play.hide();
-		this.$.playshadow.hide();		
+		this.$.play.hide();		
 		this.$.pause.show();
+		this.$.home.hide();
 	},
 	
 	// Pause game
@@ -164,7 +173,19 @@ enyo.kind({
 		// Show play button, hide pause button
 		this.$.timer.pause();
 		this.$.pause.hide();
-		this.$.pauseshadow.hide();
 		this.$.play.show();
+		this.$.home.show();
+	},
+	
+	restart: function() {
+		console.log("restarted");
+	},
+	
+	next: function() {
+		console.log("next");
+	},
+	
+	home: function() {
+		console.log("home");
 	}
 });

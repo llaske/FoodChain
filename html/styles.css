@@ -20,15 +20,15 @@
 	border-style: inset;
 	border-color: darkgray;
 	box-shadow: 5px -4px 4px 2px black;
-	width: 250px;
+	width: 220px;
 	background-color: white;
-	cursor: move;
 	position: absolute;
 	z-index: 0;
 }
 
 .card-dragged {
 	border-color: red;
+	cursor: move;	
 }
 
 .cardImage {
@@ -57,45 +57,47 @@
 	border-width: 2px;
 	border-style: dashed;
 	border-color: white;
-	width: 1024px;
-	height: 500px;
+	width: 1004px;
+	height: 300px;
 	z-index: -1;
+}
+
+.box-dragging {
+	cursor: move;
+}
+
+.box-win {
+	background-color: green;
+}
+
+.box-lost {
+	background-color: red;
 }
 
 .play {
 	margin-left: 400px;	
-	position: absolute;	
-	z-index: 2;
-}
-
-.playshadow {
-	margin-left: 405px;
-	margin-top: 3px;
-	position: absolute;
-	z-index: 1;
 }
 
 .validate {
-	margin-left: 540px;	
-	position: absolute;	
+	margin-left: 540px;
+}
+
+.restart {
+	margin-left: 860px;
+}
+
+.home {
+	margin-left: 10px;
+}
+
+.shadowbutton {
+	position: absolute;
 	z-index: 2;
 }
 
-.validateshadow {
-	margin-left: 545px;
-	margin-top: 3px;
+.shadowbutton-shadow {
 	position: absolute;
+	margin-left: 5px;
+	margin-top: 3px;
 	z-index: 1;
-}
-
-.footer {
-	width: 100%;
-	text-align: right;
-}
-
-.licence {
-	display: inline-block;
-	font-size: x-small;
-	margin-right: 5px;
-	margin-top: 30px;
 }
