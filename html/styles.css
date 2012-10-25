@@ -2,54 +2,56 @@
 	background-color: #005a40;
 }
 
+/* Home page */
+.game-one {
+	position: absolute;
+	left: 100px;
+	top: 300px;
+}
+
+.game-two {
+	position: absolute;
+	left: 450px;
+	top: 250px;
+}
+
+.game-three {
+	position: absolute;
+	left: 800px;
+	top: 300px;
+}
+
+/* Game One */
+.level-value {
+	margin-left: 10px;
+}
+
+.timer-value {
+	position: absolute;
+	right: 20px;
+}
+
+.score {
+	margin-left: 400px;
+}
+
+.score-value {
+	margin-left: 10px;
+}
+
+.timer-overtime {
+	color: red !important;
+}
+
 .title {
 	margin-bottom: 10px;
 	margin-top: 5px;
 	text-align: center;
-	font-size: large;
+	font-size: x-large;
 	color: white;
 	text-shadow: 0.1em .1em 1px lightgrey;
+	display: inline-block;
 }
-
-.timer {
-	color: white;
-}
-
-.card {
-	border-width: 5px;
-	border-style: inset;
-	border-color: darkgray;
-	box-shadow: 5px -4px 4px 2px black;
-	width: 220px;
-	background-color: white;
-	position: absolute;
-	z-index: 0;
-}
-
-.card-dragged {
-	border-color: red;
-	cursor: move;	
-}
-
-.cardImage {
-	width: 70%;
-	margin-top: 10px;
-	margin-left: 35px;
-}
-
-.cardText {
-	font-size:30px;
-	text-align: center;
-	padding: 5px;
-}
-
-.cardSoundIcon {
-}
-
-.cardSound {
-	width: 50px;
-}
-
 
 .box {
 	margin-top: 10px;
@@ -90,6 +92,7 @@
 	margin-left: 10px;
 }
 
+/* Components */
 .shadowbutton {
 	position: absolute;
 	z-index: 2;
@@ -100,4 +103,39 @@
 	margin-left: 5px;
 	margin-top: 3px;
 	z-index: 1;
+}
+
+.card {
+	border-width: 5px;
+	border-style: inset;
+	border-color: darkgray;
+	box-shadow: 5px -4px 4px 2px black;
+	width: 220px;
+	background-color: white;
+	position: absolute;
+	z-index: 0;
+}
+
+.card-dragged {
+	border-color: red;
+	cursor: move;	
+}
+
+.cardImage {
+	width: 70%;
+	margin-top: 10px;
+	margin-left: 35px;
+}
+
+.cardText {
+	font-size:30px;
+	text-align: center;
+	padding: 5px;
+}
+
+.cardSoundIcon {
+}
+
+.cardSound {
+	width: 50px;
 }

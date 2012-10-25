@@ -4,6 +4,7 @@ FoodChain.validChains = [
 	["cat", "mice", "corn"],
 	["fox", "bird", "spider", "flies"],
 	["fox", "duck", "frog", "flies"],
+	["snake", "frog", "flies"],
 	["fox", "duck", "frog", "snail", "grass"],
 	["spike", "spider", "flies"],
 	["shark", "fish", "shrimp"],
