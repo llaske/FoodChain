@@ -2,7 +2,7 @@
 enyo.kind({
 	name: "FoodChain.Card",
 	kind: enyo.Control,
-	published: { cardname: "", x: 0, y: 0 },
+	published: { cardname: "", x: 0, y: 0, z: 0 },
 	classes: "card",
 	components: [
 		{ name: "itemImage", classes: "cardImage", kind: "Image" },
@@ -17,6 +17,7 @@ enyo.kind({
 		this.cardnameChanged();
 		this.xChanged();
 		this.yChanged();
+		this.zChanged();
 	},
 	
 	// Rendering
@@ -43,6 +44,11 @@ enyo.kind({
 	// Coordinate setup
 	yChanged: function() {
 		this.applyStyle("margin-top", this.y+"px");
+	},
+	
+	// Coordinate setup
+	zChanged: function() {
+		this.applyStyle("z-index", this.z);
 	},
 	
 	// Change position

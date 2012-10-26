@@ -1,3 +1,13 @@
+// Cards lists
+FoodChain.cards = [
+	"alligator", "animal", "bat", "bee", "bird", "camel", "cat", "chicken", "chimp",
+	"clam", "corn", "cow", "crab", "crocodile", "crow", "dog", "duck", "fish", "flies",
+	"fox", "frog", "giraffe", "goat", "grass", "hay", "hen", "lamb", "mice", "mole",
+	"mule", "owl", "ox", "pig", "rat", "shark", "shrimp", "skunk", "snail", "snake",
+	"spider", "spike", "squid", "squirrel", "starfish", "swan", "tick", "wheat"
+];
+
+
 // Chains computation
 FoodChain.validChains = [
 	["snake", "mice", "corn"],

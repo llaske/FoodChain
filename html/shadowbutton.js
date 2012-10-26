@@ -2,7 +2,9 @@
 enyo.kind({
 	name: "ShadowButton",
 	kind: enyo.Control,
-	published: { img: "" },
+	published: {
+		img: ""
+	},
 	components: [
 		{ name: "button", kind: "Image", classes: "shadowbutton", onenter: "showShadow", onleave: "hideShadow" },
 		{ name: "buttonshadow", kind: "Image", classes: "shadowbutton-shadow" }
@@ -24,10 +26,12 @@ enyo.kind({
 	// Cursor on image, show shadow
 	showShadow: function() {
 		this.$.buttonshadow.show();
+		return false;
 	},
 
 	// Cursor out of image, hide shadow
 	hideShadow: function() {
 		this.$.buttonshadow.hide();
+		return false;
 	}
 });	
