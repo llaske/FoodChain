@@ -83,6 +83,12 @@
 .game-description {
 }
 
+.information {
+	position: absolute;
+	left: 880px;
+	top: 530px;
+}
+
 /* Game One */
 .level-value {
 	margin-left: 10px;

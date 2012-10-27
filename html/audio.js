@@ -10,7 +10,8 @@ enyo.kind({
 		src: "", crossorigin: "", preload: "auto", autoplay: false,
 		mediagroup: "", loop: false, muted: "", controlsbar: false
 	},
-
+	
+	// Constructor
 	create: function() {
 		this.inherited(arguments);
 		this.srcChanged();
@@ -23,8 +24,11 @@ enyo.kind({
 		this.controlsbarChanged();
 	},
 
+	// Render
 	rendered: function() {
 		this.inherited(arguments);
+		
+		// If source is an array component is generated here
 		if (this.src instanceof Array) {
 			var node = this.hasNode();
 			if (node != null) {
@@ -37,8 +41,17 @@ enyo.kind({
 				}
 			}
 		}
+		
+		// Handle sound ended event
+		if (this.hasNode() != null) {
+			var audio = this;
+			enyo.dispatcher.listen(audio.hasNode(), "ended", function() {
+				audio.bubble("onended");
+			});	
+		}
 	},
 	
+	// Property changed
 	srcChanged: function() {
 		if (!(this.src instanceof Array))
 			this.setAttribute("src", this.src);
@@ -73,6 +86,7 @@ enyo.kind({
 		this.setAttribute("controls", this.controlsbar);
 	},
 	
+	// Test if component could play a file type
 	canPlayType: function(typename) {
 		var node = this.hasNode();
 		if (node == null)
@@ -80,6 +94,7 @@ enyo.kind({
 		return node.canPlayType(typename);
 	},
 	
+	// Play audio
 	play: function() {
 		var node = this.hasNode();
 		if (node == null)
@@ -87,6 +102,7 @@ enyo.kind({
 		node.play();
 	},
 	
+	// Pause audio
 	pause: function() {
 		var node = this.hasNode();
 		if (node == null)
@@ -94,6 +110,7 @@ enyo.kind({
 		node.pause();
 	},
 	
+	// Test if audio is paused
 	paused: function() {
 		var node = this.hasNode();
 		if (node == null)
@@ -101,6 +118,7 @@ enyo.kind({
 		return node.paused;
 	},
 
+	// Test if audio is ended
 	ended: function() {
 		var node = this.hasNode();
 		if (node == null)

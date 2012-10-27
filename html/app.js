@@ -1,6 +1,7 @@
 // Force Enyo to process ondragover event
 document.ondragover = enyo.dispatch;
 
+
 // Context
 FoodChain.context = {
 	// Current score
@@ -34,6 +35,7 @@ enyo.kind({
 		{ name: "one", kind: "ShadowButton", img: "one", classes: "game-one", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
 		{ name: "two", kind: "ShadowButton", img: "two", classes: "game-two", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
 		{ name: "three", kind: "ShadowButton", img: "three", classes: "game-three", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
+		{ kind: "ShadowButton", img: "information", classes: "information", ontap: "" },
 		
 		// Popup for game title and description
 		{ name: "popup", classes: "game-popup", components: [
@@ -75,9 +77,8 @@ enyo.kind({
 		
 		// Display a new card
 		var x = Math.floor(Math.random()*1000);
-		var y = Math.floor(Math.random()*400)
-		this.$.cardbox.createComponent({ kind: "FoodChain.Card", cardname: FoodChain.cards[this.cardcount], x: x, y: y, z: 0});	
-		this.$.cardbox.render();
+		var y = Math.floor(Math.random()*400);
+		this.$.cardbox.createComponent({ kind: "FoodChain.Card", cardname: FoodChain.cards[this.cardcount], x: x, y: y, z: 0}).render();
 		this.cardcount = this.cardcount + 1;
 	},
 	

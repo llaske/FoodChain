@@ -69,10 +69,16 @@ enyo.kind({
 		}
 	
 		// Display cards
-		var x = 10, y = 10;
+		var step = 1004/this.mixed.length;
+		var x = step/2 - 110, y = 30;
+		this.cards = [];
 		for (var i = 0 ; i < this.mixed.length ; i++) {
-			this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: this.mixed[i], x: x, y: y, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish" }, {owner: this});
-			x = x + 240;
+			var autoplay = (i == 0) ? true: false;
+			this.cards.push(this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: this.mixed[i], x: x, y: y, autoplay: autoplay, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish", onended: "endSound" }, {owner: this}));
+			if (i != 0) {
+				this.cards[i].hide();
+			}
+			x = x + step;
 		}
 		
 		// Box handling
@@ -94,11 +100,33 @@ enyo.kind({
 		this.timecount = {mins:0, secs:0, tenth:0};
 		this.$.timercount.removeClass("timer-overtime");
 		this.displayTimer();
-		this.$.timer.pause();
-		this.$.timer.start();
-		this.$.timer.resume();
 		
 		this.render();
+	},
+	
+	// Sound ended, play next card if any
+	endSound: function(s) {
+		// All is already displayed
+		if (this.cards == null)
+			return;
+			
+		// Display next card
+		for (var i = 0 ; i < this.cards.length ; i++ ) {
+			if (this.cards[i] != null && this.cards[i].cardname == s.cardname) {
+				this.cards[i] = null;
+				if (i+1 < this.cards.length) {
+					this.cards[i+1].show();
+					this.cards[i+1].play();
+					return;
+				}
+			}
+		}
+		
+		// All card displayed, start timer
+		this.cards = null;
+		this.$.timer.pause();
+		this.$.timer.start();
+		this.$.timer.resume();		
 	},
 	
 	// Display timer value
