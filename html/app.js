@@ -14,6 +14,13 @@ FoodChain.goHome = function() {
 		FoodChain.context.home.renderInto(document.body);
 };
 
+// Sugar interface
+FoodChain.sugar = new Sugar();
+FoodChain.log = function(msg) {
+	FoodChain.sugar.sendMessage("console-message", msg);
+	console.log(msg);
+}
+
 
 // Main app class
 enyo.kind({
@@ -44,7 +51,7 @@ enyo.kind({
 		]},
 		
 		// Sound track
-		{ name: "soundtrack", kind: "HTML5.Audio", src: ["audio/popcorn.mp3", "audio/popcorn.ogg"], preload: "auto", autobuffer: true, controlsbar: false, loop: true }		
+		{ name: "soundtrack", kind: "HTML5.Audio", src: "audio/popcorn.ogg", autoplay: true, preload: "auto", autobuffer: true, controlsbar: false, loop: true }		
 	],
 	
 	// Constructor, save home
@@ -63,14 +70,9 @@ enyo.kind({
 		this.games["two"] = { title: "Build", description: "Set cards in the right order to build the right food chain." };
 		this.games["three"] = { title: "Play (coming soon)", description: "Play the food chain: eat and avoid being eaten." };
 	},
-
-	rendered: function() {
-		this.inherited(arguments);
-		this.$.soundtrack.play();
-	},
 	
 	// Display card animation
-	displayCard: function() {
+	displayCard: function() {	
 		// All cards displayed
 		if (this.cardcount == FoodChain.cards.length)
 			return;

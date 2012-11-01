@@ -39,8 +39,7 @@ enyo.kind({
 			{ name: "home", kind: "ShadowButton", img: "home", classes: "home", ontap: "home" },
 			
 			// Sound effect
-			{ name: "winSound", kind: "HTML5.Audio", src: ["audio/applause.mp3", "audio/applause.ogg"], preload: "auto", autobuffer: true, controlsbar: false },
-			{ name: "lostSound", kind: "HTML5.Audio", src: ["audio/disappointed.mp3", "audio/disappointed.ogg"], preload: "auto", autobuffer: true, controlsbar: false }
+			{ name: "sound", kind: "HTML5.Audio", preload: "auto", autobuffer: true, controlsbar: false, onended: "endSound" }
 		]}		
 	],
 	
@@ -69,13 +68,16 @@ enyo.kind({
 		}
 	
 		// Display cards
-		var step = 1004/this.mixed.length;
+		var step = 1174/this.mixed.length;
 		var x = step/2 - 110, y = 30;
 		this.cards = [];
 		for (var i = 0 ; i < this.mixed.length ; i++) {
 			var autoplay = (i == 0) ? true: false;
-			this.cards.push(this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: this.mixed[i], x: x, y: y, autoplay: autoplay, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish", onended: "endSound" }, {owner: this}));
-			if (i != 0) {
+			this.cards.push(this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: this.mixed[i], x: x, y: y, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish"}, {owner: this}));
+			if (i == 0) {
+				this.$.sound.setSrc(this.cards[i].sound);
+				this.$.sound.setAutoplay(true);
+			} else {
 				this.cards[i].hide();
 			}
 			x = x + step;
@@ -112,11 +114,11 @@ enyo.kind({
 			
 		// Display next card
 		for (var i = 0 ; i < this.cards.length ; i++ ) {
-			if (this.cards[i] != null && this.cards[i].cardname == s.cardname) {
+			if (this.cards[i] != null && this.cards[i].sound == s.src) {
 				this.cards[i] = null;
 				if (i+1 < this.cards.length) {
 					this.cards[i+1].show();
-					this.cards[i+1].play();
+					this.cards[i+1].play(this.$.sound);
 					return;
 				}
 			}
@@ -154,15 +156,15 @@ enyo.kind({
 	
 	// Play sound when card taped
 	taped: function(s, e) {
-		s.play();
-		console.log("taped");
+		s.play(this.$.sound);
+		FoodChain.log("taped");
 	},
 	
 	// Card drag start, change style to dragged
 	dragstart: function(s, e) {
 		s.addClass("card-dragged");
 		this.$.gamebox.addClass("box-dragging");
-		s.play();
+		s.play(this.$.sound);
 		this.dragobject = s;
 		this.dragx = e.clientX-s.x;
 		this.dragy = e.clientY-s.y;
@@ -226,7 +228,7 @@ enyo.kind({
 		
 		// Play win or loose sound
 		if (win) {
-			this.$.winSound.play();
+			this.$.sound.play("audio/applause.ogg");
 			this.$.gamebox.addClass("box-win");
 			this.computeScore();
 			this.$.home.show();
@@ -234,7 +236,7 @@ enyo.kind({
 				this.$.forward.show();
 		}
 		else {
-			this.$.lostSound.play();
+			this.$.sound.play("audio/disappointed.ogg");
 			this.$.gamebox.addClass("box-lost");
 			this.$.home.show();
 			this.$.restart.show();

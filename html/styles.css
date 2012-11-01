@@ -81,6 +81,7 @@
 }
 
 .game-description {
+	font-size: small;
 }
 
 .information {
@@ -100,7 +101,7 @@
 }
 
 .score {
-	margin-left: 400px;
+	margin-left: 350px;
 }
 
 .score-value {
@@ -127,7 +128,7 @@
 	border-width: 2px;
 	border-style: dashed;
 	border-color: white;
-	width: 1004px;
+	width: 1174px;
 	height: 300px;
 	z-index: -1;
 }

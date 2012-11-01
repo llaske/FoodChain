@@ -3,5 +3,5 @@ name = FoodChain
 activity_version = 1
 bundle_id = org.olpcfrance.FoodChain
 exec = sugar-activity activity.FoodChainActivity
-icon = activity-enyo
+icon = activity-foodchain
 license = GPLv2+

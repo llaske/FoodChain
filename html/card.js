@@ -2,13 +2,12 @@
 enyo.kind({
 	name: "FoodChain.Card",
 	kind: enyo.Control,
-	published: { cardname: "", x: 0, y: 0, z: 0, autoplay: false },
+	published: { cardname: "", x: 0, y: 0, z: 0 },
 	classes: "card",
 	components: [
 		{ name: "itemImage", classes: "cardImage", kind: "Image" },
 		{ kind: "Image", src: "images/sound_icon.png", classes: "cardSoundIcon" },
-		{ name: "itemText", classes: "cardText" },
-		{ name: "itemSound", classes: "cardSound", kind: "HTML5.Audio", preload: "auto", autobuffer: true, controlsbar: false }
+		{ name: "itemText", classes: "cardText" }
 	],
 	
 	// Constructor
@@ -18,7 +17,6 @@ enyo.kind({
 		this.xChanged();
 		this.yChanged();
 		this.zChanged();
-		this.autoplayChanged();
 	},
 	
 	// Rendering
@@ -30,10 +28,9 @@ enyo.kind({
 	cardnameChanged: function() {
 		var image = "images/cards/"+this.cardname+".png";
 		var text = this.cardname.substring(0,1).toUpperCase()+this.cardname.substring(1);
-		var sound = ["audio/en/cards/"+this.cardname+".mp3", "audio/en/cards/"+this.cardname+".ogg"];
+		this.sound = "audio/en/cards/"+this.cardname+".ogg";
 		
 		this.$.itemImage.setAttribute("src", image);
-		this.$.itemSound.setSrc(sound);
 		this.$.itemText.setContent(text);
 	},
 	
@@ -52,9 +49,9 @@ enyo.kind({
 		this.applyStyle("z-index", this.z);
 	},
 	
-	// Autoplay sound setup
-	autoplayChanged: function() {
-		this.$.itemSound.setAutoplay(this.autoplay);
+	// Play sound using the media
+	play: function(media) {
+		media.play(this.sound);
 	},
 	
 	// Change position
@@ -63,13 +60,5 @@ enyo.kind({
 		this.xChanged();
 		this.y = y;
 		this.yChanged();		
-	},
-	
-	// Play sound when image taped
-	play: function() {
-		if (this.$.itemSound.paused())
-			this.$.itemSound.play();
-		else
-			this.$.itemSound.pause();
 	}
 });

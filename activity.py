@@ -64,6 +64,9 @@ class FoodChainActivity(activity.Activity):
         """Toolbar button forward clicked, signal to JavaScript to update page count"""
         self.enyo.send_message("forward_clicked", 1)
 
+    def console_message(self, message):
+        self.console.set_text(self.console.get_text(self.console.get_start_iter(), self.console.get_end_iter(), True)+message+"\n")
+
     def init_context(self, args):
         """Init Javascript context sending buddy information"""
         # Get XO colors
@@ -81,17 +84,29 @@ class FoodChainActivity(activity.Activity):
     def make_mainview(self):
         """Create the activity view"""
         # Create global box
-        vbox = Gtk.VBox(True)
+        vbox = Gtk.VBox(False)
 
         # Create webview
-        self.webview = webview  = WebKit.WebView()
+        self.webview = webview = WebKit.WebView()
         webview.show()
         vbox.pack_start(webview, True, True, 0)
+
+        # Create console
+        if True:
+            sw = Gtk.ScrolledWindow()
+            textview = Gtk.TextView()
+            self.console = console = textview.get_buffer()
+            sw.add(textview)
+            sw.show()
+            textview.show()
+            sw.set_size_request(800, 100)
+            vbox.pack_end(sw, True, True, 0)
         vbox.show()
 
         # Activate Enyo interface
         self.enyo = Enyo(webview)
         self.enyo.connect("ready", self.init_context)
+        self.enyo.connect("console-message", self.console_message)
 
         # Go to first page
         web_app_page = os.path.join(activity.get_bundle_path(), "html/index.html")

@@ -28,33 +28,25 @@ enyo.kind({
 	rendered: function() {
 		this.inherited(arguments);
 		
-		// If source is an array component is generated here
-		if (this.src instanceof Array) {
-			var node = this.hasNode();
-			if (node != null) {
-				var len = this.src.length;
-				var i;
-				for (i = 0; i < len ; i++) {
-					var source = document.createElement("source");
-					source.setAttribute("src", this.src[i]);
-					node.appendChild(source);
-				}
-			}
-		}
-		
-		// Handle sound ended event
-		if (this.hasNode() != null) {
+		// Handle init
+		if (this.hasNode() != null) {		
+			// Handle sound ended event
 			var audio = this;
 			enyo.dispatcher.listen(audio.hasNode(), "ended", function() {
 				audio.bubble("onended");
 			});	
+			
+			// Autoplay
+	console.log(this.src + " " + this.autoplay);
+			if (this.src != "" && this.autoplay == true) {
+				this.hasNode().play();
+			}			
 		}
 	},
 	
 	// Property changed
 	srcChanged: function() {
-		if (!(this.src instanceof Array))
-			this.setAttribute("src", this.src);
+		this.setAttribute("src", this.src);
 	},
 
 	crossoriginChanged: function() {
@@ -95,7 +87,9 @@ enyo.kind({
 	},
 	
 	// Play audio
-	play: function() {
+	play: function(sound) {
+		this.src = sound;
+		this.srcChanged();
 		var node = this.hasNode();
 		if (node == null)
 			return;	
