@@ -11,7 +11,7 @@ FoodChain.context = {
 // Home handling
 FoodChain.goHome = function() {
 	if (FoodChain.context.home != null)
-		FoodChain.context.home.renderInto(document.body);
+		FoodChain.context.home.renderInto(document.getElementById("body"));
 };
 
 // Sugar interface
@@ -50,15 +50,15 @@ enyo.kind({
 			{ name: "description", classes: "game-description" }
 		]},
 		
-		// Sound track
-		{ name: "soundtrack", kind: "HTML5.Audio", src: "audio/popcorn.ogg", autoplay: true, preload: "auto", autobuffer: true, controlsbar: false, loop: true }		
+		// End of sound event
+		{kind: "Signals", onEndOfSound: "endOfSound"}
 	],
 	
 	// Constructor, save home
 	create: function() {
 		this.inherited(arguments);
 		FoodChain.context.home = this;
-		
+	
 		// Start display card timer
 		this.cardcount = 0;
 		this.$.timer.start();	
@@ -69,6 +69,19 @@ enyo.kind({
 		this.games["one"] = { title: "Learn (coming soon)", description: "Set cards in the right box to learn what sort of food eat each animals." };
 		this.games["two"] = { title: "Build", description: "Set cards in the right order to build the right food chain." };
 		this.games["three"] = { title: "Play (coming soon)", description: "Play the food chain: eat and avoid being eaten." };
+		
+		// Init soundtrack
+		this.soundtrack = "audio/popcorn.ogg";
+	},
+	
+	// Play soundtrack when rendered and restart at end
+	rendered: function() {
+		FoodChain.sound.play(this.soundtrack);
+	},
+	
+	endOfSound: function(e, s) {
+		if (s.src == this.soundtrack)
+			FoodChain.sound.play(this.soundtrack);
 	},
 	
 	// Display card animation
@@ -105,6 +118,6 @@ enyo.kind({
 		
 		// Launch Build game
 		if (s.name == "two")
-			new FoodChain.BuildGame({level: 1}).renderInto(document.body);
+			new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
 	}
 });

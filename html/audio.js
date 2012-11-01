@@ -1,13 +1,12 @@
-﻿// HTML 5 Audio Element encapsulation
-// Lionel Laské 2012 - CC BY-SA 
-// See http://www.w3.org/wiki/HTML/Elements/audio for more
+﻿// FoodChain audio stuff
 
+// Basic HTML 5 Audio Element encapsulation
 enyo.kind({
 	name: "HTML5.Audio",
 	kind: enyo.Control,
 	tag: "audio",
 	published: {
-		src: "", crossorigin: "", preload: "auto", autoplay: false,
+		src: "", crossorigin: "", preload: "auto",
 		mediagroup: "", loop: false, muted: "", controlsbar: false
 	},
 	
@@ -17,8 +16,6 @@ enyo.kind({
 		this.srcChanged();
 		this.crossoriginChanged();
 		this.preloadChanged();
-		this.autoplayChanged();
-		this.mediagroupChanged();
 		this.loopChanged();
 		this.mutedChanged();
 		this.controlsbarChanged();
@@ -27,20 +24,12 @@ enyo.kind({
 	// Render
 	rendered: function() {
 		this.inherited(arguments);
-		
 		// Handle init
 		if (this.hasNode() != null) {		
 			// Handle sound ended event
 			var audio = this;
 			enyo.dispatcher.listen(audio.hasNode(), "ended", function() {
-				audio.bubble("onended");
-			});	
-			
-			// Autoplay
-	console.log(this.src + " " + this.autoplay);
-			if (this.src != "" && this.autoplay == true) {
-				this.hasNode().play();
-			}			
+			});			
 		}
 	},
 	
@@ -55,14 +44,6 @@ enyo.kind({
 	
 	preloadChanged: function() {
 		this.setAttribute("preload", this.preload);
-	},
-	
-	autoplayChanged: function() {
-		this.setAttribute("autoplay", this.autoplay);
-	},
-	
-	mediagroupChanged: function() {
-		this.setAttribute("mediagroup", this.mediagroup);
 	},
 
 	loopChanged: function() {
@@ -87,9 +68,7 @@ enyo.kind({
 	},
 	
 	// Play audio
-	play: function(sound) {
-		this.src = sound;
-		this.srcChanged();
+	play: function() {
 		var node = this.hasNode();
 		if (node == null)
 			return;	
@@ -119,4 +98,29 @@ enyo.kind({
 			return false;		
 		return node.ended;
 	}	
+});
+
+// FoodChain Audio engine
+enyo.kind({
+	name: "FoodChain.Audio",
+	kind: enyo.Control,
+	components: [
+		{ name: "sound", kind: "HTML5.Audio", preload: "auto", autobuffer: true, controlsbar: false, onended: "broadcastEnd" }
+	],
+	
+	// Constructor
+	create: function() {
+		this.inherited(arguments);
+	},
+
+	// Play a sound
+	play: function(sound) {
+		this.$.sound.setSrc(sound);
+		this.$.sound.play();
+	},
+	
+	// End of sound detected, broadcast the signal
+	broadcastEnd: function() {
+		enyo.Signals.send("onEndOfSound", this.$.sound);
+	}
 });

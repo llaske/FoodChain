@@ -37,9 +37,9 @@ enyo.kind({
 			{ name: "restart", kind: "ShadowButton", img: "restart", classes: "restart", ontap: "restart" },
 			{ name: "forward", kind: "ShadowButton", img: "forward", classes: "restart", ontap: "next" },
 			{ name: "home", kind: "ShadowButton", img: "home", classes: "home", ontap: "home" },
-			
-			// Sound effect
-			{ name: "sound", kind: "HTML5.Audio", preload: "auto", autobuffer: true, controlsbar: false, onended: "endSound" }
+		
+			// End of sound event
+			{kind: "Signals", onEndOfSound: "endSound"}			
 		]}		
 	],
 	
@@ -75,8 +75,7 @@ enyo.kind({
 			var autoplay = (i == 0) ? true: false;
 			this.cards.push(this.$.gamebox.createComponent({ kind: "FoodChain.Card", cardname: this.mixed[i], x: x, y: y, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish"}, {owner: this}));
 			if (i == 0) {
-				this.$.sound.setSrc(this.cards[i].sound);
-				this.$.sound.setAutoplay(true);
+				FoodChain.sound.play(this.cards[i].sound);
 			} else {
 				this.cards[i].hide();
 			}
@@ -107,7 +106,7 @@ enyo.kind({
 	},
 	
 	// Sound ended, play next card if any
-	endSound: function(s) {
+	endSound: function(e, s) {
 		// All is already displayed
 		if (this.cards == null)
 			return;
@@ -118,7 +117,7 @@ enyo.kind({
 				this.cards[i] = null;
 				if (i+1 < this.cards.length) {
 					this.cards[i+1].show();
-					this.cards[i+1].play(this.$.sound);
+					FoodChain.sound.play(this.cards[i+1].sound);
 					return;
 				}
 			}
@@ -156,15 +155,15 @@ enyo.kind({
 	
 	// Play sound when card taped
 	taped: function(s, e) {
-		s.play(this.$.sound);
-		FoodChain.log("taped");
+		FoodChain.sound.play(s.sound);
+		FoodChain.log(s.cardname+" taped");
 	},
 	
 	// Card drag start, change style to dragged
 	dragstart: function(s, e) {
 		s.addClass("card-dragged");
 		this.$.gamebox.addClass("box-dragging");
-		s.play(this.$.sound);
+		FoodChain.sound.play(s.sound);
 		this.dragobject = s;
 		this.dragx = e.clientX-s.x;
 		this.dragy = e.clientY-s.y;
@@ -228,7 +227,7 @@ enyo.kind({
 		
 		// Play win or loose sound
 		if (win) {
-			this.$.sound.play("audio/applause.ogg");
+			FoodChain.sound.play("audio/applause.ogg");
 			this.$.gamebox.addClass("box-win");
 			this.computeScore();
 			this.$.home.show();
@@ -236,7 +235,7 @@ enyo.kind({
 				this.$.forward.show();
 		}
 		else {
-			this.$.sound.play("audio/disappointed.ogg");
+			FoodChain.sound.play("audio/disappointed.ogg");
 			this.$.gamebox.addClass("box-lost");
 			this.$.home.show();
 			this.$.restart.show();

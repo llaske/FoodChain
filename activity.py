@@ -91,8 +91,8 @@ class FoodChainActivity(activity.Activity):
         webview.show()
         vbox.pack_start(webview, True, True, 0)
 
-        # Create console
-        if True:
+        # Create console for debug (set to True)
+        if False:
             sw = Gtk.ScrolledWindow()
             textview = Gtk.TextView()
             self.console = console = textview.get_buffer()
