@@ -119,6 +119,11 @@ enyo.kind({
 		this.$.sound.play();
 	},
 	
+	// Pause
+	pause: function() {
+		this.$.sound.pause();
+	},
+	
 	// End of sound detected, broadcast the signal
 	broadcastEnd: function() {
 		enyo.Signals.send("onEndOfSound", this.$.sound);

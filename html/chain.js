@@ -7,6 +7,12 @@ FoodChain.cards = [
 	"spider", "spike", "squid", "squirrel", "starfish", "swan", "tick", "wheat"
 ];
 
+// Feed strategy list and members
+FoodChain.feedStrategy = [
+	{ name: "herbivore", members: ["swan", "bee", "cow", "giraffe", "squirrel", "goat", "ox", "lamb", "mule", "camel", "chimp"] },
+	{ name: "carnivore", members: ["mole", "spike", "tick", "squid", "crab", "owl", "snake", "dog", "alligator", "bat", "crocodile", "frog", "shark", "spider", "starfish", "crocodile"] },
+	{ name: "omnivore", members: ["duck", "flies", "pig", "mice", "rat", "skunk", "chicken", "squirrel", "hen", "fox"] }
+];
 
 // Chains computation
 FoodChain.validChains = [
@@ -36,7 +42,7 @@ FoodChain.validChains = [
 // Create a random foodchain for the specified size
 FoodChain.randomChain = function(size) {
 	// Check size
-	if (size == undefined || size < 2) {
+	if (size == undefined) {
 		size = 3;
 	}
 	
@@ -95,4 +101,42 @@ FoodChain.mix = function(chain) {
 	mixedchain.push(tomix[0]);
 	
 	return mixedchain;
+};
+
+
+// Create a random feed card for the specified size and count
+FoodChain.randomFeedList = function(size, count) {
+	// Check size
+	if (size == undefined) {
+		size = 2;
+	}
+	
+	// Look for chains for this size
+	var list = [];
+	for(var i = 0 ; i < count ; i++) {
+		// Choose randomly a feed strategy
+		var strategy = Math.floor(Math.random()*size);
+		
+		// Choose randomly a card not already picked
+		var index = -1;
+		var cardname;
+		while (index == -1) {
+			// Pick a card
+			index = Math.floor(Math.random()*FoodChain.feedStrategy[strategy].members.length);
+			
+			// Check if not already here
+			cardname = FoodChain.feedStrategy[strategy].members[index];
+			for (var j = 0 ; index != -1 && j < list.length ; j++) {
+				if (list[j].cardname == cardname) {
+					index = -1;
+				}
+			}
+		}
+		
+		// Add card
+		list.push({cardname: cardname, strategy: strategy});
+	}
+	
+	// Return list
+	return list;
 };

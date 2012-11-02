@@ -1,25 +1,3 @@
-// Force Enyo to process ondragover event
-document.ondragover = enyo.dispatch;
-
-
-// Context
-FoodChain.context = {
-	// Current score
-	score: 0
-};
-
-// Home handling
-FoodChain.goHome = function() {
-	if (FoodChain.context.home != null)
-		FoodChain.context.home.renderInto(document.getElementById("body"));
-};
-
-// Sugar interface
-FoodChain.sugar = new Sugar();
-FoodChain.log = function(msg) {
-	FoodChain.sugar.sendMessage("console-message", msg);
-	console.log(msg);
-}
 
 
 // Main app class
@@ -66,7 +44,7 @@ enyo.kind({
 		// Create game description
 		this.$.popup.hide();
 		this.games = [];
-		this.games["one"] = { title: "Learn (coming soon)", description: "Set cards in the right box to learn what sort of food eat each animals." };
+		this.games["one"] = { title: "Learn", description: "Set cards in the right box to learn what sort of food each animal eat." };
 		this.games["two"] = { title: "Build", description: "Set cards in the right order to build the right food chain." };
 		this.games["three"] = { title: "Play (coming soon)", description: "Play the food chain: eat and avoid being eaten." };
 		
@@ -115,9 +93,16 @@ enyo.kind({
 	// Launch a game
 	playGame: function(s) {
 		this.$.popup.hide();
+		FoodChain.sound.pause();
+		
+		// Launch Learn game
+		if (s.name == "one") {
+			new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
+		}
 		
 		// Launch Build game
-		if (s.name == "two")
+		else if (s.name == "two") {
 			new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
+		}
 	}
 });

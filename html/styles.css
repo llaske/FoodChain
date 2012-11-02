@@ -138,27 +138,98 @@
 }
 
 .box-win {
-	background-color: green;
+	background-color: lightgreen;
 }
 
 .box-lost {
-	background-color: red;
+	background-color: #ff8080;
 }
 
 .play {
-	margin-left: 400px;	
+	margin-left: 510px;	
 }
 
 .validate {
-	margin-left: 540px;
+	margin-left: 650px;
 }
 
 .restart {
-	margin-left: 860px;
+	margin-left: 1030px;
 }
 
 .home {
 	margin-left: 10px;
+}
+
+/* Game Two */
+
+.start-box {
+	margin-top: 10px;
+	margin-left: 450px;
+	border-width: 2px;
+	border-style: dashed;
+	border-color: white;
+	width: 260px;
+	height: 260px;
+	z-index: -1;
+}
+
+.end-box {
+	border-width: 2px;
+	border-style: dashed;
+	width: 260px;
+	height: 300px;
+	z-index: -1;
+	display: inline-block;	
+}
+
+.herb-box-two {
+	margin-top: 10px;
+	margin-left: 250px;
+}
+
+.herb-box-three {
+	margin-top: 10px;
+	margin-left: 170px;
+}
+
+.carn-box-two {
+	margin-top: 10px;
+	margin-left: 130px;
+}
+
+.carn-box-three {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.omni-box-two {
+	visibility: hidden;
+}
+
+.omni-box-three {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.box-name {
+	text-align: center;
+	font-size: large;
+}
+
+.herb-color {
+	color: green;
+	border-color: green;	
+}
+
+.carn-color {
+	color: red;
+	border-color: red;	
+}
+
+.omni-color {
+	color: black;
+	border-color: black;	
 }
 
 /* Components */
@@ -186,7 +257,7 @@
 }
 
 .card-dragged {
-	border-color: red;
+	border-color: blue;
 	cursor: move;	
 }
 

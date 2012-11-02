@@ -4,7 +4,9 @@ enyo.depends(
 	"card.js",
 	"chain.js",
 	"shadowbutton.js",
+	"learngame.js",
 	"buildgame.js",
 	"sugar.js",
+	"util.js",
 	"app.js"
 );

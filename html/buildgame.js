@@ -101,6 +101,7 @@ enyo.kind({
 		this.timecount = {mins:0, secs:0, tenth:0};
 		this.$.timercount.removeClass("timer-overtime");
 		this.displayTimer();
+		this.$.timer.pause();		
 		
 		this.render();
 	},
