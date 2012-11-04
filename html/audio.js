@@ -13,6 +13,7 @@ enyo.kind({
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
+		
 		this.srcChanged();
 		this.crossoriginChanged();
 		this.preloadChanged();
@@ -24,6 +25,7 @@ enyo.kind({
 	// Render
 	rendered: function() {
 		this.inherited(arguments);
+		
 		// Handle init
 		if (this.hasNode() != null) {		
 			// Handle sound ended event
@@ -111,21 +113,36 @@ enyo.kind({
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
+		this.format = null;
 	},
 
+	// First render, test sound format supported
+	rendered: function() {
+		this.inherited(arguments);
+		
+		if (this.$.sound.canPlayType("audio/ogg"))
+			this.format = ".ogg";
+		else if (this.$.sound.canPlayType("audio/mpeg"))
+			this.format = ".mp3";
+	},
+	
 	// Play a sound
 	play: function(sound) {
-		this.$.sound.setSrc(sound);
+		if (this.format == null)
+			return;
+		this.$.sound.setSrc(sound+this.format);
 		this.$.sound.play();
 	},
 	
 	// Pause
 	pause: function() {
+		if (this.format == null)
+			return;
 		this.$.sound.pause();
 	},
 	
 	// End of sound detected, broadcast the signal
 	broadcastEnd: function() {
-		enyo.Signals.send("onEndOfSound", this.$.sound);
+		enyo.Signals.send("onEndOfSound", this.$.sound.src.substring(0,this.$.sound.src.length-4));
 	}
 });

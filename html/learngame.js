@@ -120,12 +120,12 @@ enyo.kind({
 				this.$.pause.hide();				
 				this.$.home.show();
 				this.render();
-				if (this.level != FoodChain.buildLevels.length)
+				if (this.level != FoodChain.learnLevels.length)
 					this.$.forward.show();
 
 			// Display next card
 			} else {
-				this.currentcard = this.currentcard + 1;  // TODO: Check for last one !
+				this.currentcard = this.currentcard + 1;
 				var card = this.$.startbox.createComponent({ kind: "FoodChain.Card", cardname: this.cardlist[this.currentcard].cardname, x: 10, y: 10, ontap: "taped", ondragstart: "dragstart", ondragfinish: "dragfinish"}, {owner: this});	
 				FoodChain.sound.play(card.sound);	
 				this.render();
@@ -222,12 +222,12 @@ enyo.kind({
 		if (win) {
 			this.nextaction = 1;
 			this.addScore(1);
-			FoodChain.sound.play("audio/applause.ogg");
+			FoodChain.sound.play("audio/applause");
 			s.addClass("box-win");
 		}
 		else {
 			this.nextaction = 2;
-			FoodChain.sound.play("audio/disappointed.ogg");
+			FoodChain.sound.play("audio/disappointed");
 			s.addClass("box-lost");
 		}
 	},

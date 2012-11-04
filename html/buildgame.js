@@ -114,7 +114,7 @@ enyo.kind({
 			
 		// Display next card
 		for (var i = 0 ; i < this.cards.length ; i++ ) {
-			if (this.cards[i] != null && this.cards[i].sound == s.src) {
+			if (this.cards[i] != null && this.cards[i].sound == s) {
 				this.cards[i] = null;
 				if (i+1 < this.cards.length) {
 					this.cards[i+1].show();
@@ -228,7 +228,7 @@ enyo.kind({
 		
 		// Play win or loose sound
 		if (win) {
-			FoodChain.sound.play("audio/applause.ogg");
+			FoodChain.sound.play("audio/applause");
 			this.$.gamebox.addClass("box-win");
 			this.computeScore();
 			this.$.home.show();
@@ -236,7 +236,7 @@ enyo.kind({
 				this.$.forward.show();
 		}
 		else {
-			FoodChain.sound.play("audio/disappointed.ogg");
+			FoodChain.sound.play("audio/disappointed");
 			this.$.gamebox.addClass("box-lost");
 			this.$.home.show();
 			this.$.restart.show();

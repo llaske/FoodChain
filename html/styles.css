@@ -91,6 +91,77 @@
 }
 
 /* Game One */
+
+.start-box {
+	margin-top: 10px;
+	margin-left: 450px;
+	border-width: 2px;
+	border-style: dashed;
+	border-color: white;
+	width: 260px;
+	height: 260px;
+	z-index: -1;
+}
+
+.end-box {
+	border-width: 2px;
+	border-style: dashed;
+	width: 260px;
+	height: 300px;
+	z-index: -1;
+	display: inline-block;	
+}
+
+.herb-box-two {
+	margin-top: 10px;
+	margin-left: 250px;
+}
+
+.herb-box-three {
+	margin-top: 10px;
+	margin-left: 170px;
+}
+
+.carn-box-two {
+	margin-top: 10px;
+	margin-left: 130px;
+}
+
+.carn-box-three {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.omni-box-two {
+	visibility: hidden;
+}
+
+.omni-box-three {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.box-name {
+	text-align: center;
+	font-size: large;
+}
+
+.herb-color {
+	color: green;
+	border-color: green;	
+}
+
+.carn-color {
+	color: red;
+	border-color: red;	
+}
+
+.omni-color {
+	color: black;
+	border-color: black;	
+}
+
+/* Game Two */
 .level-value {
 	margin-left: 10px;
 }
@@ -161,76 +232,24 @@
 	margin-left: 10px;
 }
 
-/* Game Two */
+/* Game Three */
 
-.start-box {
+.game-box {
 	margin-top: 10px;
-	margin-left: 450px;
+	margin-left: 5px;
 	border-width: 2px;
 	border-style: dashed;
 	border-color: white;
-	width: 260px;
-	height: 260px;
+	background-image: url(images/play_background.png);
+	width: 1174px;
+	height: 600px;
 	z-index: -1;
 }
 
-.end-box {
-	border-width: 2px;
-	border-style: dashed;
-	width: 260px;
-	height: 300px;
-	z-index: -1;
-	display: inline-block;	
-}
-
-.herb-box-two {
-	margin-top: 10px;
-	margin-left: 250px;
-}
-
-.herb-box-three {
-	margin-top: 10px;
-	margin-left: 170px;
-}
-
-.carn-box-two {
-	margin-top: 10px;
-	margin-left: 130px;
-}
-
-.carn-box-three {
-	margin-top: 10px;
-	margin-left: 20px;
-}
-
-.omni-box-two {
+.image-preload {
 	visibility: hidden;
 }
 
-.omni-box-three {
-	margin-top: 10px;
-	margin-left: 20px;
-}
-
-.box-name {
-	text-align: center;
-	font-size: large;
-}
-
-.herb-color {
-	color: green;
-	border-color: green;	
-}
-
-.carn-color {
-	color: red;
-	border-color: red;	
-}
-
-.omni-color {
-	color: black;
-	border-color: black;	
-}
 
 /* Components */
 .shadowbutton {

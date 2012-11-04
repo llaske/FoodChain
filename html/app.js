@@ -7,7 +7,7 @@ enyo.kind({
 	classes: "board",
 	components: [
 		// Display card timer
-		{ name: "timer", kind: "Timer", baseInterval: 500, onTriggered: "displayCard" },
+		{ name: "timer", kind: "Timer", baseInterval: 1600, onTriggered: "displayCard" },
 		
 		// Card box
 		{ name: "glass", classes: "glass" },
@@ -46,10 +46,10 @@ enyo.kind({
 		this.games = [];
 		this.games["one"] = { title: "Learn", description: "Set cards in the right box to learn what sort of food each animal eat." };
 		this.games["two"] = { title: "Build", description: "Set cards in the right order to build the right food chain." };
-		this.games["three"] = { title: "Play (coming soon)", description: "Play the food chain: eat and avoid being eaten." };
+		this.games["three"] = { title: "Play", description: "Play the food chain: eat and avoid being eaten." };
 		
 		// Init soundtrack
-		this.soundtrack = "audio/popcorn.ogg";
+		this.soundtrack = "audio/popcorn";
 	},
 	
 	// Play soundtrack when rendered and restart at end
@@ -58,7 +58,7 @@ enyo.kind({
 	},
 	
 	endOfSound: function(e, s) {
-		if (s.src == this.soundtrack)
+		if (s == this.soundtrack)
 			FoodChain.sound.play(this.soundtrack);
 	},
 	
@@ -97,12 +97,17 @@ enyo.kind({
 		
 		// Launch Learn game
 		if (s.name == "one") {
-			new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
+			new FoodChain.LearnGame({level: 6}).renderInto(document.getElementById("body"));
 		}
 		
 		// Launch Build game
 		else if (s.name == "two") {
 			new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
 		}
+		
+		// Launch Play game
+		else if (s.name == "three") {
+			new FoodChain.PlayGame({level: 1}).renderInto(document.getElementById("body"));
+		}		
 	}
 });

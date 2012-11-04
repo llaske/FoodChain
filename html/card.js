@@ -28,7 +28,7 @@ enyo.kind({
 	cardnameChanged: function() {
 		var image = "images/cards/"+this.cardname+".png";
 		var text = FoodChain.firstLetterCase(this.cardname);
-		this.sound = "audio/en/cards/"+this.cardname+".ogg";
+		this.sound = "audio/en/cards/"+this.cardname;
 		
 		this.$.itemImage.setAttribute("src", image);
 		this.$.itemText.setContent(text);

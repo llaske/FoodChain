@@ -1,12 +1,15 @@
 enyo.depends(
+	"lib/canvas/package.js",
 	"audio.js",
 	"timer.js",
 	"card.js",
 	"chain.js",
-	"shadowbutton.js",
+	"shadowbutton.js",	
+	"sprite.js",
 	"learngame.js",
 	"buildgame.js",
+	"playgame.js",
 	"sugar.js",
-	"util.js",
-	"app.js"
+	"app.js",
+	"util.js"
 );
