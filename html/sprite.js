@@ -9,6 +9,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.halfWidth = this.width/2;
 		this.halfHeight = this.height/2;
+		this.animating = false;
 	},
 	
 	// Draw the sprite in the canvas context
@@ -96,5 +97,55 @@ enyo.kind({
 
 		return !(r2.x > (r1.x+r1.dx) || (r2.x+r2.dx) < r1.x || 
 			r2.y > (r1.y+r1.dy) || (r2.y+r2.dy) < r1.y);		
-	}
-});		
+	},
+	
+	// Compute distance between two sprites
+	distance: function(sprite) {
+		var dx = sprite.x-this.x;
+		var dy = sprite.y-this.y;
+		var dist = Math.sqrt(dx*dx+dy*dy);
+		
+		return dist;	
+	},
+	
+	// Animate the sprite using a list of image and a movement 
+	animate: function(ctx, images, dx, dy, action) {
+		if (this.animating)
+			return;
+		this.animating = true;
+		this.animation = {ctx: ctx, index: 0, images: images, dx: dx, dy: dy, action: action };
+		this.animation.job = window.setInterval(enyo.bind(this, "animateTimer"), 50);
+	},
+	
+	// Timer use of animation
+	animateTimer: function() {
+		// End of animation ?
+		if (this.animation.index == this.animation.images.length) {
+			this.animating = false;
+			window.clearInterval(this.animation.job);
+			return;
+		}
+		
+		// Draw current frame
+		this.unDraw(this.animation.ctx);
+		if (this.animation.dx != undefined)
+			this.x += this.animation.dx;
+		if (this.animation.dy != undefined)
+			this.y += this.animation.dy;
+		this.useImage(this.animation.images[this.animation.index]);
+		this.draw(this.animation.ctx);
+		
+		// Action to do at each move
+		if (this.animation.action != undefined) {
+			if (!this.animation.action(this)) {
+				this.animating = false;
+				this.animation.index = this.animation.images.length;
+				window.clearInterval(this.animation.job);
+				return;			
+			}
+		}
+		
+		// Next frame
+		this.animation.index = this.animation.index + 1;
+	},
+});	

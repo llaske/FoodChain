@@ -250,6 +250,14 @@
 	visibility: hidden;
 }
 
+.life-border {
+	margin-left: 90px;
+}
+
+.life {
+	display: inline-block;
+}
+
 
 /* Components */
 .shadowbutton {

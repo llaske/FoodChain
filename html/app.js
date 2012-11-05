@@ -7,7 +7,7 @@ enyo.kind({
 	classes: "board",
 	components: [
 		// Display card timer
-		{ name: "timer", kind: "Timer", baseInterval: 1600, onTriggered: "displayCard" },
+		{ name: "timer", kind: "Timer", baseInterval: 1200, onTriggered: "displayCard" },
 		
 		// Card box
 		{ name: "glass", classes: "glass" },
@@ -38,8 +38,7 @@ enyo.kind({
 		FoodChain.context.home = this;
 	
 		// Start display card timer
-		this.cardcount = 0;
-		this.$.timer.start();	
+		this.cardcount = 0;	
 		
 		// Create game description
 		this.$.popup.hide();
@@ -97,7 +96,7 @@ enyo.kind({
 		
 		// Launch Learn game
 		if (s.name == "one") {
-			new FoodChain.LearnGame({level: 6}).renderInto(document.getElementById("body"));
+			new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
 		}
 		
 		// Launch Build game

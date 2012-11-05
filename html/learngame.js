@@ -24,7 +24,7 @@ enyo.kind({
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},			
-			{ name: "timer", kind: "Timer", onTriggered: "updateTimer" },
+			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
 			
 			// Board zone
 			{ name: "startbox", classes: "start-box", components: [] },
@@ -97,8 +97,7 @@ enyo.kind({
 		this.$.level.setContent(" "+this.level);
 		this.timecount = {mins:0, secs:0, tenth:0};
 		this.$.timercount.removeClass("timer-overtime");
-		this.displayTimer();
-		this.$.timer.pause();		
+		this.displayTimer();	
 		
 		this.render();
 	},
@@ -144,8 +143,6 @@ enyo.kind({
 		}
 		
 		// Start timer
-		this.$.timer.pause();
-		this.$.timer.start();
 		this.$.timer.resume();		
 	},
 	

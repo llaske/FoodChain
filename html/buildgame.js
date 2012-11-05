@@ -25,7 +25,7 @@ enyo.kind({
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},			
-			{ name: "timer", kind: "Timer", onTriggered: "updateTimer" },
+			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
 			
 			// Board zone
 			{ name: "gamebox", classes: "box", ondrop: "drop", ondragover: "dragover", components: [] },
@@ -126,8 +126,6 @@ enyo.kind({
 		
 		// All card displayed, start timer
 		this.cards = null;
-		this.$.timer.pause();
-		this.$.timer.start();
 		this.$.timer.resume();		
 	},
 	

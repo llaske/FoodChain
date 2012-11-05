@@ -34,3 +34,9 @@ FoodChain.addRemoveClass = function(element, toAdd, toRemove) {
 	element.removeClass(toRemove);
 	element.addClass(toAdd);
 }
+
+// "Old style" sleep function
+FoodChain.sleep = function(delay) {
+	var start = new Date().getTime();
+	while (new Date().getTime() < start + delay);
+}
