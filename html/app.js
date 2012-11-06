@@ -20,7 +20,7 @@ enyo.kind({
 		{ name: "one", kind: "ShadowButton", img: "one", classes: "game-one", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
 		{ name: "two", kind: "ShadowButton", img: "two", classes: "game-two", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
 		{ name: "three", kind: "ShadowButton", img: "three", classes: "game-three", ontap: "playGame", onenter: "showGameDescription", onleave: "hideGameDescription" },
-		{ kind: "ShadowButton", img: "information", classes: "information", ontap: "" },
+		{ kind: "ShadowButton", img: "information", classes: "information", ontap: "showCredits" },
 		
 		// Popup for game title and description
 		{ name: "popup", classes: "game-popup", components: [
@@ -87,6 +87,11 @@ enyo.kind({
 		this.$.title.removeClass("game-color-"+s.name);	
 		this.$.description.removeClass("game-color-"+s.name);		
 		this.$.popup.hide();
+	},
+	
+	// Show credit page
+	showCredits: function() {
+		new FoodChain.Credits().renderInto(document.getElementById("body"));	
 	},
 	
 	// Launch a game

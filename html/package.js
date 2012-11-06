@@ -9,6 +9,7 @@ enyo.depends(
 	"learngame.js",
 	"buildgame.js",
 	"playgame.js",
+	"credits.js",
 	"sugar.js",
 	"app.js",
 	"util.js"

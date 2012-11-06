@@ -40,3 +40,21 @@ FoodChain.sleep = function(delay) {
 	var start = new Date().getTime();
 	while (new Date().getTime() < start + delay);
 }
+
+// Create a object respecting a condition on a set of object
+FoodChain.createWithCondition = function(create, condition, set) {
+	var conditionValue;
+	var newObject;
+	var time = 0;
+	do {
+		conditionValue = true;
+		newObject = create();
+		for (var i = 0; conditionValue && i < set.length ; i++) {
+			conditionValue = condition(newObject, set[i]);
+		}
+		time++;
+	} while (!conditionValue && time < 12); // time is need to avoid infinite or too long loop
+	if (!conditionValue)
+		FoodChain.log("WARNING: out of pre-requisite creating "+newObject.id);
+	return newObject;
+}

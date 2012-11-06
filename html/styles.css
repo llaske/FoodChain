@@ -55,7 +55,7 @@
 	left: 400px;
 	top: 460px;
 	width: 250px;
-	height: 100px;
+	height: 300px;
 	border: medium solid black;
 	border-radius: 20px / 15px;
 	background-color: white;
@@ -86,8 +86,8 @@
 
 .information {
 	position: absolute;
-	left: 880px;
-	top: 530px;
+	left: 1030px;
+	top: 630px;
 }
 
 /* Game One */
@@ -172,7 +172,7 @@
 }
 
 .score {
-	margin-left: 350px;
+	margin-left: 330px;
 }
 
 .score-value {
@@ -251,15 +251,44 @@
 }
 
 .life-border {
-	margin-left: 90px;
+	margin-top: 10px;
+	margin-left: 180px;
+	position: absolute;
+	z-index: 2;
 }
 
 .life {
 	display: inline-block;
 }
 
+/* Credits */
+
+.credit-title {
+	font-size: x-large;
+	margin-top: 10px;
+	margin-left: 300px;
+	color: white;
+}
+
+.credit-name {
+	font-size: small;
+	margin-left: 300px;	
+	color: white;
+}
+
+.two-column-credits {
+	display: inline-block;
+}
+
+.emul-canvas {
+	background-image: url(images/play_background.png);
+	margin-left: 50px;
+	margin-top: 50px;
+	position: absolute;
+}
 
 /* Components */
+
 .shadowbutton {
 	position: absolute;
 	z-index: 2;
