@@ -1,4 +1,4 @@
-// Level config
+﻿// Level config
 FoodChain.learnLevels = [
 	{ size: 2, count: 5, time: 40 },  // Level 1
 	{ size: 2, count: 10, time: 60 }, // Level 2

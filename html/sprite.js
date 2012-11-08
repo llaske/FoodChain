@@ -1,4 +1,4 @@
-
+﻿
 // Light sprite class
 enyo.kind({
 	name: "Sprite",	

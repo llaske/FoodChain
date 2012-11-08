@@ -1,4 +1,4 @@
-// Level config
+﻿// Level config
 FoodChain.playLevels = [
 	{ flies: 2, rocks: 2, snakes: 0, time: 30 },   // Level 1
 	{ flies: 2, rocks: 3, snakes: 0, time: 40 },   // Level 2

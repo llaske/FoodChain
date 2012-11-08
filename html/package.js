@@ -1,4 +1,4 @@
-enyo.depends(
+﻿enyo.depends(
 	"lib/canvas/package.js",
 	"audio.js",
 	"timer.js",

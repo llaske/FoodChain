@@ -1,4 +1,4 @@
-
+﻿
 // Timer object
 enyo.kind({
     name: "Timer",

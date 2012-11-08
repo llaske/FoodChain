@@ -1,4 +1,4 @@
-// Utility functions
+﻿// Utility functions
 
 
 // Force Enyo to process ondragover event

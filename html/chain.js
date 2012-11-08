@@ -1,4 +1,4 @@
-// Cards lists
+﻿// Cards lists
 FoodChain.cards = [
 	"alligator", "animal", "bat", "bee", "bird", "camel", "cat", "chicken", "chimp",
 	"clam", "corn", "cow", "crab", "crocodile", "crow", "dog", "duck", "fish", "flies",

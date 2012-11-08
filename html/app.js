@@ -1,4 +1,4 @@
-
+﻿
 
 // Main app class
 enyo.kind({

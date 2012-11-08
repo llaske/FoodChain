@@ -1,4 +1,4 @@
-// Card component with image, text and sound
+﻿// Card component with image, text and sound
 enyo.kind({
 	name: "FoodChain.Card",
 	kind: enyo.Control,

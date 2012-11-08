@@ -1,4 +1,4 @@
-.board {
+﻿.board {
 	background-color: #005a40;
 }
 
@@ -310,6 +310,8 @@
 	background-color: white;
 	position: absolute;
 	z-index: 0;
+	-webkit-user-select: none;
+	user-select: none;		
 }
 
 .card-dragged {

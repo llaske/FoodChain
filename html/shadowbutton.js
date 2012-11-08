@@ -1,4 +1,4 @@
-// Button component with image and shadow
+﻿// Button component with image and shadow
 enyo.kind({
 	name: "ShadowButton",
 	kind: enyo.Control,
