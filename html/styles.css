@@ -17,7 +17,7 @@
 	left: 0px;
 	top: 0px;
 	width: 100%;
-	height: 100%;
+	height: 800px;
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
 }
@@ -86,8 +86,8 @@
 
 .information {
 	position: absolute;
-	left: 1030px;
-	top: 630px;
+	left: 85%;
+	top: 85%;
 }
 
 /* Game One */
@@ -110,26 +110,39 @@
 	height: 300px;
 	z-index: -1;
 	display: inline-block;	
+	border-color: white;
 }
 
 .herb-box-two {
 	margin-top: 10px;
 	margin-left: 250px;
+	background-image: url(images/grass.png);	
+	background-repeat: no-repeat;	
+	background-position: center;	
 }
 
 .herb-box-three {
 	margin-top: 10px;
 	margin-left: 170px;
+	background-image: url(images/grass.png);	
+	background-repeat: no-repeat;	
+	background-position: center;	
 }
 
 .carn-box-two {
 	margin-top: 10px;
 	margin-left: 130px;
+	background-image: url(images/meat.png);	
+	background-repeat: no-repeat;	
+	background-position: center;
 }
 
 .carn-box-three {
 	margin-top: 10px;
 	margin-left: 20px;
+	background-image: url(images/meat.png);	
+	background-repeat: no-repeat;	
+	background-position: center;	
 }
 
 .omni-box-two {
@@ -139,27 +152,17 @@
 .omni-box-three {
 	margin-top: 10px;
 	margin-left: 20px;
+	background-image: url(images/recycle.png);	
+	background-repeat: no-repeat;	
+	background-position: center;		
 }
 
 .box-name {
 	text-align: center;
 	font-size: large;
+	color: white;
 }
 
-.herb-color {
-	color: green;
-	border-color: green;	
-}
-
-.carn-color {
-	color: red;
-	border-color: red;	
-}
-
-.omni-color {
-	color: black;
-	border-color: black;	
-}
 
 /* Game Two */
 .level-value {
@@ -209,23 +212,23 @@
 }
 
 .box-win {
-	background-color: lightgreen;
+	background-color: green;
 }
 
 .box-lost {
-	background-color: #ff8080;
+	background-color: red;
 }
 
 .play {
-	margin-left: 510px;	
+	margin-left: 45%;	
 }
 
 .validate {
-	margin-left: 650px;
+	margin-left: 60%;
 }
 
 .restart {
-	margin-left: 1030px;
+	margin-left: 85%;
 }
 
 .home {

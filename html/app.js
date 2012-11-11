@@ -38,7 +38,7 @@ enyo.kind({
 		FoodChain.context.home = this;
 	
 		// Start display card timer
-		this.cardcount = 0;	
+		this.initCardStack();
 		
 		// Create game description
 		this.$.popup.hide();
@@ -49,6 +49,16 @@ enyo.kind({
 		
 		// Init soundtrack
 		this.soundtrack = "audio/popcorn";
+	},
+	
+	// Init card stack for the animation
+	initCardStack: function() {
+		this.cardcount = 0;
+		this.cards = [];
+		for (var i = 0 ; i < 12 ; i++) {
+			var index = Math.floor(Math.random()*FoodChain.cards.length); 
+			this.cards.push(FoodChain.cards[index]);
+		}	
 	},
 	
 	// Play soundtrack when rendered and restart at end
@@ -64,13 +74,17 @@ enyo.kind({
 	// Display card animation
 	displayCard: function() {	
 		// All cards displayed
-		if (this.cardcount == FoodChain.cards.length)
+		if (this.cardcount == this.cards.length) {
+			this.$.cardbox.destroyComponents();
+			this.$.cardbox.render();
+			this.initCardStack();
 			return;
+		}
 		
 		// Display a new card
 		var x = Math.floor(Math.random()*1000);
 		var y = Math.floor(Math.random()*400);
-		this.$.cardbox.createComponent({ kind: "FoodChain.Card", cardname: FoodChain.cards[this.cardcount], x: x, y: y, z: 0}).render();
+		this.$.cardbox.createComponent({ kind: "FoodChain.Card", cardname: this.cards[this.cardcount], x: x, y: y, z: 0}).render();
 		this.cardcount = this.cardcount + 1;
 	},
 	
@@ -96,6 +110,7 @@ enyo.kind({
 	
 	// Launch a game
 	playGame: function(s) {
+		// Stop sound
 		this.$.popup.hide();
 		FoodChain.sound.pause();
 		

@@ -28,7 +28,7 @@ enyo.kind({
 			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
 			
 			// Board zone
-			{ name: "gamebox", classes: "box", ondrop: "drop", ondragover: "dragover", components: [] },
+			{ name: "gamebox", classes: "box", ontap: "unselect", ondrop: "drop", ondragover: "dragover", components: [] },
 			
 			// Buttons bar
 			{ name: "validate", kind: "ShadowButton", img: "validate", classes: "validate", ontap: "controlOrder" },
@@ -46,6 +46,7 @@ enyo.kind({
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
+		this.previous = null;
 		this.mixed = null;
 		this.levelChanged();
 	},
@@ -63,7 +64,20 @@ enyo.kind({
 		
 		// Compute the start chain
 		if (this.mixed == null) {
-			this.chain = FoodChain.randomChain(FoodChain.buildLevels[this.level-1].size);
+			var same;
+			do {
+				// Pick a random chain and ensure it's not the same that the previous one
+				this.chain = FoodChain.randomChain(FoodChain.buildLevels[this.level-1].size);
+				if (this.previous == null || this.previous.length != this.chain.length) {
+					same = false;
+				} else {
+					same = true;
+					for (var i = 0 ; same && i < this.chain.length ; i++ ) {
+						if (this.previous[i] == this.chain[i])
+							same = false;
+					}
+				}
+			}  while (same);
 			this.mixed = FoodChain.mix(this.chain);
 		}
 	
@@ -84,6 +98,7 @@ enyo.kind({
 		
 		// Box handling
 		this.dragobject = null;
+		this.selectedobject = null;
 		this.zmax = 0;
 		this.$.gamebox.removeClass("box-win");
 		this.$.gamebox.removeClass("box-lost");
@@ -152,10 +167,36 @@ enyo.kind({
 		this.displayTimer();
 	},
 	
-	// Play sound when card taped
+	// Play sound when card taped, set card as selected (avoid need of drag&drop)
 	taped: function(s, e) {
-		FoodChain.sound.play(s.sound);
 		FoodChain.log(s.cardname+" taped");
+		
+		// Use selection to avoid drag&drop
+		if (this.selectedobject == null) {
+			// No selection, set card as selected, play sound
+			this.selectedobject = s;
+			s.addClass("card-dragged");	
+			FoodChain.sound.play(s.sound);
+			this.toTop(s);
+			return true;
+		} else if (s != this.selectedobject) {
+			// A card is already selected, swap the 2 card
+			var startx = this.selectedobject.getX(), starty = this.selectedobject.getY();
+			var endx = s.getX(), endy = s.getY();
+			this.selectedobject.moveTo(endx, endy);
+			s.moveTo(startx, starty);
+			this.selectedobject.removeClass("card-dragged");
+			this.selectedobject = null;
+			return true;
+		}
+	},
+	
+	// Tap on the board unselect current card
+	unselect: function() {
+		if (this.selectedobject != null) {
+			this.selectedobject.removeClass("card-dragged");
+			this.selectedobject = null;		
+		}
 	},
 	
 	// Card drag start, change style to dragged
@@ -164,6 +205,7 @@ enyo.kind({
 		this.$.gamebox.addClass("box-dragging");
 		FoodChain.sound.play(s.sound);
 		this.dragobject = s;
+		this.selectedobject = null;
 		this.dragx = e.clientX-s.x;
 		this.dragy = e.clientY-s.y;
 		this.toTop(this.dragobject);
@@ -288,6 +330,7 @@ enyo.kind({
 	// Go to the next level
 	next: function() {
 		this.level = this.level + 1;
+		this.previous = this.chain;
 		this.mixed = null;
 		this.levelChanged();
 	},

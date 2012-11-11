@@ -39,7 +39,7 @@ FoodChain.validChains = [
 	["starfish", "crab"]
 ];
 
-// Create a random foodchain for the specified size
+// Create a random foodchain for the specified size (game build)
 FoodChain.randomChain = function(size) {
 	// Check size
 	if (size == undefined) {
@@ -104,7 +104,7 @@ FoodChain.mix = function(chain) {
 };
 
 
-// Create a random feed card for the specified size and count
+// Create a random feed card for the specified size and count (game learn)
 FoodChain.randomFeedList = function(size, count) {
 	// Check size
 	if (size == undefined) {

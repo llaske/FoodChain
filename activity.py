@@ -52,18 +52,6 @@ class FoodChainActivity(activity.Activity):
         # Display as a JSON string to see structure
         self.alert("Python received "+self.enyo.json_encode(param))
 
-    def go_home(self, button):
-        """Toolbar button home clicked, signal to JavaScript to update page count"""
-        self.enyo.send_message("home_clicked", 0)
-
-    def go_back(self, button):
-        """Toolbar button back clicked, signal to JavaScript to update page count"""
-        self.enyo.send_message("back_clicked", -1)
-
-    def go_forward(self, button):
-        """Toolbar button forward clicked, signal to JavaScript to update page count"""
-        self.enyo.send_message("forward_clicked", 1)
-
     def console_message(self, message):
         self.console.set_text(self.console.get_text(self.console.get_start_iter(), self.console.get_end_iter(), True)+message+"\n")
 
@@ -124,12 +112,6 @@ class FoodChainActivity(activity.Activity):
         toolbar_box.toolbar.insert(activity_button, 0)
         activity_button.show()
 
-        home_button = ToolButton('go-home')
-        home_button.set_tooltip('Page count to 0')
-        home_button.connect('clicked', self.go_home)
-        toolbar_box.toolbar.insert(home_button, -1)
-        home_button.show()
-
         title_entry = TitleEntry(self)
         toolbar_box.toolbar.insert(title_entry, -1)
         title_entry.show()
@@ -137,19 +119,6 @@ class FoodChainActivity(activity.Activity):
         description_item = DescriptionItem(self)
         toolbar_box.toolbar.insert(description_item, -1)
         description_item.show()
-
-        back_button = self.back_button = ToolButton('go-previous-paired')
-        back_button.set_tooltip('Page count -1')
-        back_button.connect('clicked', self.go_back)
-        back_button.set_sensitive(False)
-        toolbar_box.toolbar.insert(back_button, -1)
-        back_button.show()
-
-        forward_button = self.forward_button = ToolButton('go-next-paired')
-        forward_button.set_tooltip('Page count +1')
-        forward_button.connect('clicked', self.go_forward)
-        toolbar_box.toolbar.insert(forward_button, -1)
-        forward_button.show()
 
         share_button = ShareButton(self)
         toolbar_box.toolbar.insert(share_button, -1)

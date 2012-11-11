@@ -29,14 +29,14 @@ enyo.kind({
 			// Board zone
 			{ name: "startbox", classes: "start-box", components: [] },
 			{ components: [
-				{ name: "herbbox", classes: "end-box herb-color", ondrop: "drop", ondragover: "dragover", components: [
+				{ name: "herbbox", classes: "end-box", ontap: "chooseAsEnd", ondrop: "drop", ondragover: "dragover", components: [
 					{ name: "herbname", classes: "box-name herb-color" }
 				]},
-				{ name: "carnbox", classes: "end-box carn-color", ondrop: "drop", ondragover: "dragover", components: [
-					{ name: "carnname", classes: "box-name carn-color" }
+				{ name: "carnbox", classes: "end-box", ontap: "chooseAsEnd", ondrop: "drop", ondragover: "dragover", components: [
+					{ name: "carnname", classes: "box-name" }
 				]},
-				{ name: "omnibox", classes: "end-box omni-color", ondrop: "drop", ondragover: "dragover", components: [
-					{ name: "omniname", classes: "box-name omni-color" }
+				{ name: "omnibox", classes: "end-box omni-box-two", ontap: "chooseAsEnd", ondrop: "drop", ondragover: "dragover", components: [
+					{ name: "omniname", classes: "box-name" }
 				]}
 			]},
 			
@@ -76,6 +76,7 @@ enyo.kind({
 		this.$.carnname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[1].name));
 		this.$.omniname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[2].name));		
 		this.dragobject = null;
+		this.selectedobject = null;
 		
 		// Compute the card list to sort
 		if (this.cardlist == null) {
@@ -169,10 +170,12 @@ enyo.kind({
 		this.displayTimer();
 	},
 	
-	// Play sound when card taped
+	// Play sound when card taped, set card as selected (avoid need of drag&drop)
 	taped: function(s, e) {
 		FoodChain.sound.play(s.sound);
 		FoodChain.log(s.cardname+" taped");
+		this.selectedobject = s;
+		s.addClass("card-dragged");
 	},
 	
 	// Card drag start, change style to dragged
@@ -184,6 +187,7 @@ enyo.kind({
 		this.$.omnibox.addClass("box-dragging");
 		FoodChain.sound.play(s.sound);
 		this.dragobject = s;
+		this.selectedobject = null;
 	},
 	
 	// Card drag end, change style to not dragged
@@ -201,6 +205,16 @@ enyo.kind({
 			return true;
 		e.preventDefault();
 		return false;
+	},
+	
+	// Choose the final box for the card, same as drop but without drag
+	chooseAsEnd: function(s, e) {
+		if (this.selectedobject == null)
+			return true;
+		this.selectedobject.removeClass("card-dragged");			
+		this.dragobject = this.selectedobject;
+		this.drop(s, e);
+		this.selectedobject = null;
 	},
 	
 	// Dropped in the box, check if correct

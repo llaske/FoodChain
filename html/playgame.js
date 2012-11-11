@@ -8,6 +8,17 @@ FoodChain.playLevels = [
 	{ flies: 4, rocks: 3, snakes: 2, time: 140 },  // Level 6
 ];
 
+// Key to use
+FoodChain.playKeys = [
+	{ key: 75, heading: 0, dx: 1, dy: 0 },
+	{ key: 107, heading: 0, dx: 1, dy: 0 },
+	{ key: 73, heading: 90, dx: 0, dy: -1 },
+	{ key: 105, heading: 90, dx: 0, dy: -1 },
+	{ key: 74, heading: 0, dx: 1, dy: 0 },
+	{ key: 106, heading: 180, dx: -1, dy: 0 },
+	{ key: 76, heading: 270, dx: 0, dy: 1 },
+	{ key: 108, heading: 270, dx: 0, dy: 1 }
+];
 
 // Play Game class
 enyo.kind({
@@ -34,7 +45,7 @@ enyo.kind({
 			
 			// Playing zone
 			{ classes: "game-box", components: [
-				{kind: "Canvas", name: "canvas", attributes: {width: 1174, height: 600}}
+				{kind: "Canvas", name: "canvas", ontap: "clickToMove", attributes: {width: 1174, height: 600}}
 			]},
 			{ kind: "Timer", baseInterval: 500, onTriggered: "fliesEngine" },
 			{ kind: "Timer", baseInterval: 800, onTriggered: "snakesEngine" },
@@ -191,6 +202,31 @@ enyo.kind({
 		this.$.timer.resume();
 	},
 	
+	// Show direction to frog using click on board
+	clickToMove: function(s, e) {
+		// Compute direction comparing click with frog position
+		var dx = e.clientX-this.frog.getX(), dy = e.clientY-this.frog.getY(); 
+		if (dx == 0 && dy == 0)
+			return;
+		if (Math.abs(dx) > Math.abs(dy)) {
+			dx = dx > 0 ? 1 : -1;
+			dy = 0;
+		} else {
+			dx = 0;
+			dy = dy > 0 ? 1 : -1;
+		}
+		
+		// Simulate the equivalent key direction
+		for (var i = 0 ; i < FoodChain.playKeys.length ; i++ ) {
+			var playKey = FoodChain.playKeys[i];
+			if (playKey.dx == dx && playKey.dy == dy) {
+				e.charCode = playKey.key;
+				this.keyPressed(s, e);
+				return;
+			}
+		}
+	},
+	
 	// A key was pressed
 	keyPressed: function(s,e) {
 		var key = e.charCode;
@@ -204,17 +240,19 @@ enyo.kind({
 			return;
 		
 		// Compute asked direction
-		var newdir;
+		var newHeading;
 		var dx = 0, dy = 0;
-		if (key == 107 || key == 75) {
-			newHeading = 0; dx = 1;
-		} else if (key == 105 || key == 73) {
-			newHeading = 90; dy = -1;
-		} else if (key == 106 || key == 74) {
-			newHeading = 180; dx = -1;
-		} else if (key == 108 || key == 76) {
-			newHeading = 270; dy = 1;
-		} else {
+		var foundKey = false;
+		for (var i = 0 ; i < FoodChain.playKeys.length ; i++ ) {
+			var playKey = FoodChain.playKeys[i];
+			if (key == playKey.key) {
+				dx = playKey.dx;
+				dy = playKey.dy;
+				newHeading = playKey.heading;
+				foundKey = true;
+			}
+		}
+		if (!foundKey) {
 			FoodChain.log("key pressed: " + key);		
 			return;
 		}
