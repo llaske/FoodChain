@@ -24,8 +24,7 @@ enyo.kind({
 				{ content: "Score:", classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
-			]},			
-			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
+			]},	
 			
 			// Board zone
 			{ name: "gamebox", classes: "box", ontap: "unselect", ondrop: "drop", ondragover: "dragover", components: [] },
@@ -48,6 +47,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.previous = null;
 		this.mixed = null;
+		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
 		this.levelChanged();
 	},
 	
@@ -337,6 +337,7 @@ enyo.kind({
 	
 	// Go to the home page of the app
 	home: function() {
+		this.$.timer.stop();	
 		FoodChain.goHome();
 	}
 });

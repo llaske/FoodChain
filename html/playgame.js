@@ -40,15 +40,12 @@ enyo.kind({
 				{ content: "Score:", classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
-			]},			
-			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
+			]},	
 			
 			// Playing zone
 			{ classes: "game-box", components: [
 				{kind: "Canvas", name: "canvas", ontap: "clickToMove", attributes: {width: 1174, height: 600}}
 			]},
-			{ kind: "Timer", baseInterval: 500, onTriggered: "fliesEngine" },
-			{ kind: "Timer", baseInterval: 800, onTriggered: "snakesEngine" },
 			
 			// Buttons bar
 			{ name: "play", kind: "ShadowButton", img: "play", classes: "play", ontap: "play" },	
@@ -60,34 +57,38 @@ enyo.kind({
 			{kind: "Signals", onEndOfSound: "endSound", onkeypress: "keyPressed"},
 			
 			// Preload all images for the game
-			{kind: "Image", id: "frog1", src:"images/frog1.png", classes: "image-preload", onload: "initGame" },
-			{kind: "Image", id: "frog2", src:"images/frog2.png", classes: "image-preload" },
-			{kind: "Image", id: "frog3", src:"images/frog3.png", classes: "image-preload" },
-			{kind: "Image", id: "frog4", src:"images/frog4.png", classes: "image-preload" },
-			{kind: "Image", id: "frog5", src:"images/frog5.png", classes: "image-preload" },
-			{kind: "Image", id: "frog6", src:"images/frog6.png", classes: "image-preload" },
-			{kind: "Image", id: "frog7", src:"images/frog7.png", classes: "image-preload" },
-			{kind: "Image", id: "frog8", src:"images/frog8.png", classes: "image-preload" },					
-			{kind: "Image", id: "frog9", src:"images/frog9.png", classes: "image-preload" },
-			{kind: "Image", id: "fly1", src:"images/fly1.png", classes: "image-preload" },
-			{kind: "Image", id: "fly2", src:"images/fly2.png", classes: "image-preload" },
-			{kind: "Image", id: "snake1", src:"images/snake1.png", classes: "image-preload" },
-			{kind: "Image", id: "snake2", src:"images/snake2.png", classes: "image-preload" },
-			{kind: "Image", id: "snake3", src:"images/snake3.png", classes: "image-preload" },
-			{kind: "Image", id: "snake4", src:"images/snake4.png", classes: "image-preload" },
-			{kind: "Image", id: "snake5", src:"images/snake5.png", classes: "image-preload" },
-			{kind: "Image", id: "snake6", src:"images/snake6.png", classes: "image-preload" },
-			{kind: "Image", id: "snake7", src:"images/snake7.png", classes: "image-preload" },
-			{kind: "Image", id: "snake8", src:"images/snake8.png", classes: "image-preload" },
-			{kind: "Image", id: "rock", src:"images/rock.png", classes: "image-preload" }
+			{kind: "Image", id: "frog1", src:"images/frog1.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog2", src:"images/frog2.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog3", src:"images/frog3.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog4", src:"images/frog4.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog5", src:"images/frog5.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog6", src:"images/frog6.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog7", src:"images/frog7.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "frog8", src:"images/frog8.png", classes: "image-preload", onload: "imageLoaded" },					
+			{kind: "Image", id: "frog9", src:"images/frog9.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "fly1", src:"images/fly1.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "fly2", src:"images/fly2.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake1", src:"images/snake1.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake2", src:"images/snake2.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake3", src:"images/snake3.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake4", src:"images/snake4.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake5", src:"images/snake5.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake6", src:"images/snake6.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake7", src:"images/snake7.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "snake8", src:"images/snake8.png", classes: "image-preload", onload: "imageLoaded" },
+			{kind: "Image", id: "rock", src:"images/rock.png", classes: "image-preload", onload: "imageLoaded" }
 		]}		
 	],
 	
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
+		this.imagesToLoad = 20;
 		this.nextaction = 0;
 		this.life = 3;
+		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
+		this.createComponent({ name: "timerFlies", kind: "Timer", baseInterval: 500, onTriggered: "fliesEngine" }, {owner: this});		
+		this.createComponent({ name: "timerSnakes", kind: "Timer", baseInterval: 800, onTriggered: "snakesEngine" }, {owner: this});			
 		this.levelChanged();
 	},
 	
@@ -180,7 +181,13 @@ enyo.kind({
 		this.displayTimer();
 	},
 	
-	// Image loaded, start displaying game
+	// One image load
+	imageLoaded: function() {
+		if (--this.imagesToLoad == 0)
+			this.initGame();
+	},
+	
+	// All image loaded, start displaying game
 	initGame: function() {
 		this.ctx = this.$.canvas.node.getContext('2d');	
 		this.ctx.clearRect(0, 0, this.$.canvas.attributes.width, this.$.canvas.attributes.height);		
@@ -615,6 +622,9 @@ enyo.kind({
 	
 	// Go to the home page of the app
 	home: function() {
+		this.$.timer.stop();	
+		this.$.timerFlies.stop();	
+		this.$.timerSnakes.stop();	
 		FoodChain.goHome();
 	}
 });

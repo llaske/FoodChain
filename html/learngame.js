@@ -23,8 +23,7 @@ enyo.kind({
 				{ content: "Score:", classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
-			]},			
-			{ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" },
+			]},	
 			
 			// Board zone
 			{ name: "startbox", classes: "start-box", components: [] },
@@ -56,6 +55,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.cardlist = null;
 		this.nextaction = 0;
+		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
 		this.levelChanged();
 	},
 	
@@ -67,10 +67,12 @@ enyo.kind({
 			FoodChain.addRemoveClass(this.$.herbbox, "herb-box-two", "herb-box-three");
 			FoodChain.addRemoveClass(this.$.carnbox, "carn-box-two", "carn-box-three");
 			FoodChain.addRemoveClass(this.$.omnibox, "omni-box-two", "omni-box-three");	
+			this.$.omnibox.hide();
 		} else {
 			FoodChain.addRemoveClass(this.$.herbbox, "herb-box-three", "herb-box-two");
 			FoodChain.addRemoveClass(this.$.carnbox, "carn-box-three", "carn-box-two");
 			FoodChain.addRemoveClass(this.$.omnibox, "omni-box-three", "omni-box-two");			
+			this.$.omnibox.show();
 		}
 		this.$.herbname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[0].name));
 		this.$.carnname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[1].name));
@@ -296,6 +298,7 @@ enyo.kind({
 	
 	// Go to the home page of the app
 	home: function() {
+		this.$.timer.stop();
 		FoodChain.goHome();
 	}
 });

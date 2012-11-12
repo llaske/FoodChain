@@ -25,12 +25,12 @@ enyo.kind({
 	
 	// Start the timer
     start: function() {
-        this.job = window.setInterval(enyo.bind(this, "timer"), this.baseInterval);
+        this.job = window.setInterval(enyo.bind(this, "timer"), this.baseInterval);	
     },
 	
 	// Stop the timer
-    stop: function() {	
-        window.clearInterval(this.job);
+    stop: function() {		
+        window.clearInterval(this.job);		
     },
 	
 	// Pause timer

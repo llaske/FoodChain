@@ -5,10 +5,7 @@ enyo.kind({
 	name: "FoodChain.App",
 	kind: enyo.Control,
 	classes: "board",
-	components: [
-		// Display card timer
-		{ name: "timer", kind: "Timer", baseInterval: 1200, onTriggered: "displayCard" },
-		
+	components: [		
 		// Card box
 		{ name: "glass", classes: "glass" },
 		{ name: "cardbox", classes: "cardbox", components: [] },
@@ -53,17 +50,22 @@ enyo.kind({
 	
 	// Init card stack for the animation
 	initCardStack: function() {
+		// Pick randomly N cards
 		this.cardcount = 0;
 		this.cards = [];
 		for (var i = 0 ; i < 12 ; i++) {
 			var index = Math.floor(Math.random()*FoodChain.cards.length); 
 			this.cards.push(FoodChain.cards[index]);
-		}	
+		}
 	},
 	
 	// Play soundtrack when rendered and restart at end
 	rendered: function() {
+		// Play soundtrack
 		FoodChain.sound.play(this.soundtrack);
+		
+		// Create timer for card animation
+		this.createComponent({ name: "timer", kind: "Timer", baseInterval: 1200, onTriggered: "displayCard" }, {owner: this});		
 	},
 	
 	endOfSound: function(e, s) {
@@ -113,6 +115,8 @@ enyo.kind({
 		// Stop sound
 		this.$.popup.hide();
 		FoodChain.sound.pause();
+		this.$.timer.stop();
+		this.removeComponent(this.$.timer);
 		
 		// Launch Learn game
 		if (s.name == "one") {
