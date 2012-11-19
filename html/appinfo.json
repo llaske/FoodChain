@@ -1,0 +1,10 @@
+{
+  "id": "org.olpcfrance.foodchain",
+  "version": "1.0.0",
+  "vendor": "OLPC France",
+  "type": "web",
+  "main": "index.html",
+  "title": "FoodChain",
+  "icon": "images/icon.png",  
+  "uiRevision": "2"
+}

@@ -1,12 +1,12 @@
 ﻿// Level config
 FoodChain.buildLevels = [
-	{ size: 2, time: 10 }, // Level 1
-	{ size: 3, time: 30 }, // Level 2
-	{ size: 3, time: 20 }, // Level 3
-	{ size: 3, time: 10 }, // Level 4
-	{ size: 4, time: 30 }, // Level 5
-	{ size: 4, time: 20 }, // Level 6
-	{ size: 5, time: 30 }  // Level 7
+	{ size: 2, time: 2 }, // Level 1
+	{ size: 3, time: 5 }, // Level 2
+	{ size: 3, time: 3 }, // Level 3
+	{ size: 3, time: 2 }, // Level 4
+	{ size: 4, time: 5 }, // Level 5
+	{ size: 4, time: 3 }, // Level 6
+	{ size: 5, time: 3 }  // Level 7
 ];
 
 // Build Game class
@@ -19,9 +19,9 @@ enyo.kind({
 		{ name: "cards", components: [
 			// Level - Score - Time bar
 			{ components: [
-				{ content: "Level", classes: "title level-value" },
+				{ content: __$FC("Level"), classes: "title level-value" },
 				{ name: "level", content: "0", classes: "title level-value" },
-				{ content: "Score:", classes: "title score" },
+				{ content: __$FC("Score:"), classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},	
@@ -48,12 +48,14 @@ enyo.kind({
 		this.previous = null;
 		this.mixed = null;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
+		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
 	},
 	
 	// Level changed, init board then start game
 	levelChanged: function() {
 		// Delete current cards on board
+		FoodChain.context.level = this.level;		
 		var cards = [];
 		enyo.forEach(this.$.gamebox.getControls(), function(card) {
 			cards.push(card);
@@ -73,7 +75,7 @@ enyo.kind({
 				} else {
 					same = true;
 					for (var i = 0 ; same && i < this.chain.length ; i++ ) {
-						if (this.previous[i] == this.chain[i])
+						if (this.previous[i] != this.chain[i])
 							same = false;
 					}
 				}
@@ -82,8 +84,8 @@ enyo.kind({
 		}
 	
 		// Display cards
-		var step = 1174/this.mixed.length;
-		var x = step/2 - 110, y = 30;
+		var step = (FoodChain.getConfig("screen-width")-40)/this.mixed.length;
+		var x = (step/2) - (FoodChain.getConfig("card-width")/2), y = 30;
 		this.cards = [];
 		for (var i = 0 ; i < this.mixed.length ; i++) {
 			var autoplay = (i == 0) ? true: false;
@@ -169,6 +171,8 @@ enyo.kind({
 	
 	// Play sound when card taped, set card as selected (avoid need of drag&drop)
 	taped: function(s, e) {
+		if (this.$.timer.paused)
+			return true;	
 		FoodChain.log(s.cardname+" taped");
 		
 		// Use selection to avoid drag&drop
@@ -201,6 +205,8 @@ enyo.kind({
 	
 	// Card drag start, change style to dragged
 	dragstart: function(s, e) {
+		if (this.$.timer.paused)
+			return true;	
 		s.addClass("card-dragged");
 		this.$.gamebox.addClass("box-dragging");
 		FoodChain.sound.play(s.sound);
@@ -227,7 +233,7 @@ enyo.kind({
 	
 	// Dropped in the box, change card parent
 	drop: function(s, e) {
-		if (this.dragobject == null)
+		if (this.dragobject == null || this.$.timer.paused)
 			return true;		
 		e.preventDefault();
 		this.dragobject.moveTo(e.clientX-this.dragx, e.clientY-this.dragy);
@@ -339,5 +345,5 @@ enyo.kind({
 	home: function() {
 		this.$.timer.stop();	
 		FoodChain.goHome();
-	}
+	}	
 });

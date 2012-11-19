@@ -29,11 +29,23 @@ from datetime import date
 from enyo import Enyo
 
 
+# Init log
+_logger = logging.getLogger('roots-activity')
+_logger.setLevel(logging.DEBUG)
+_consolehandler = logging.StreamHandler()
+_consolehandler.setLevel(logging.DEBUG)
+_consolehandler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+_logger.addHandler(_consolehandler)
+
+
+# Main class for the activity
 class FoodChainActivity(activity.Activity):
-    """EnyoActivity class as specified in activity.info"""
+    "Main class for the activity"
 
     def __init__(self, handle):
         """Set up the activity."""
+        self.context = {}
+        self.showconsole = False
         activity.Activity.__init__(self, handle)
 
         self.max_participants = 1
@@ -47,54 +59,53 @@ class FoodChainActivity(activity.Activity):
         messagedialog.run()
         messagedialog.destroy()
 
-    def display_message(self, param):
-        """A message was received from JavaScript, display it"""
-        # Display as a JSON string to see structure
-        self.alert("Python received "+self.enyo.json_encode(param))
-
     def console_message(self, message):
+        if not self.showconsole:
+            return
         self.console.set_text(self.console.get_text(self.console.get_start_iter(), self.console.get_end_iter(), True)+message+"\n")
+        self.consoleview.scroll_mark_onscreen(self.console.get_insert())
 
     def init_context(self, args):
-        """Init Javascript context sending buddy information"""
-        # Get XO colors
-        buddy = {}
-        client = gconf.client_get_default()
-        colors = client.get_string("/desktop/sugar/user/color")
-        buddy["colors"] = colors.split(",")
-
-        # Get XO name
-        presenceService = presenceservice.get_instance()
-        buddy["name"] = presenceService.get_owner().props.nick
-
-        self.enyo.send_message("buddy", buddy)
+        "Init Javascript context sending information about saved game"
+        self.enyo.send_message("load-context", self.context)
 
     def make_mainview(self):
-        """Create the activity view"""
+        "Create the activity view"
         # Create global box
         vbox = Gtk.VBox(False)
 
         # Create webview
         self.webview = webview = WebKit.WebView()
-        webview.show()
-        vbox.pack_start(webview, True, True, 0)
 
         # Create console for debug (set to True)
-        if False:
+        self.showconsole = False
+        if self.showconsole:
+            swv = Gtk.ScrolledWindow()
+            swv.add(webview)
+            webview.show()
+            vbox.pack_start(swv, True, True, 0)
+            swv.set_size_request(800, 700)
+            swv.show()
+
             sw = Gtk.ScrolledWindow()
-            textview = Gtk.TextView()
+            self.consoleview = textview = Gtk.TextView()
             self.console = console = textview.get_buffer()
             sw.add(textview)
             sw.show()
             textview.show()
             sw.set_size_request(800, 100)
+
             vbox.pack_end(sw, True, True, 0)
+        else:
+            webview.show()
+            vbox.pack_start(webview, True, True, 0)
         vbox.show()
 
         # Activate Enyo interface
         self.enyo = Enyo(webview)
         self.enyo.connect("ready", self.init_context)
         self.enyo.connect("console-message", self.console_message)
+        self.enyo.connect("save-context", self.save_context)
 
         # Go to first page
         web_app_page = os.path.join(activity.get_bundle_path(), "html/index.html")
@@ -136,3 +147,35 @@ class FoodChainActivity(activity.Activity):
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
+
+
+    def write_file(self, file_path):
+        "Called when activity is saved, get the current context in Enyo"
+        self.file_path = file_path
+        self.enyo.send_message("save-context")
+
+
+    def save_context(self, context):
+        "Called by Enyo to save the current context"
+        file = open(self.file_path, 'w')
+        try:
+            file.write(str(context['score'])+'\n')
+            file.write(context['game']+'\n')
+            file.write(str(context['level'])+'\n')
+            file.write(str(context['life'])+'\n')
+        finally:
+            file.close()
+
+
+    def read_file(self, file_path):
+        "Called when activity is loaded, load the current context in the file"
+        file = open(file_path, 'r')
+        self.context = {}
+        try:
+            self.context['score'] = file.readline().strip('\n')
+            self.context['game'] = file.readline().strip('\n')
+            self.context['level'] = file.readline().strip('\n')
+            self.context['life'] = file.readline().strip('\n')
+        finally:
+            file.close()
+

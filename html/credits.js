@@ -7,16 +7,16 @@ enyo.kind({
 	components: [
 		{ components: [
 			{ classes: "two-column-credits", components: [
-				{ content: "concept & code:", classes: "credit-title" },
+				{ content: __$FC("concept & code:"), classes: "credit-title" },
 				{ content: "Lionel Laské", classes: "credit-name" },
-				{ content: "arts:", classes: "credit-title" },
+				{ content: __$FC("arts:"), classes: "credit-title" },
 				{ content: "Art4Apps (learn & build game)", classes: "credit-name" },
 				{ content: "Vicki Wenderlich (play game)", classes: "credit-name" },
 				{ content: "Mathafix (icon)", classes: "credit-name" },
 				{ content: "Ray Larabie (home font)", classes: "credit-name" },
-				{ content: "music:", classes: "credit-title" },
+				{ content: __$FC("music:"), classes: "credit-title" },
 				{ content: "part of Popcorn by Gershon Kingsley", classes: "credit-name" },	
-				{ content: "sound effects:", classes: "credit-title" },
+				{ content: __$FC("sound effects:"), classes: "credit-title" },
 				{ content: "Charel Sytze (applause)", classes: "credit-name" },	
 				{ content: "Unchaz (disappointment)", classes: "credit-name" },	
 				{ content: "Esformouse (frog)", classes: "credit-name" },	

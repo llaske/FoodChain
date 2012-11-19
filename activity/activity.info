@@ -4,4 +4,5 @@ activity_version = 1
 bundle_id = org.olpcfrance.FoodChain
 exec = sugar-activity activity.FoodChainActivity
 icon = activity-foodchain
+mime_types = application/x-foodchain-activity;
 license = GPLv2+

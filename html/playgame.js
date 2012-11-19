@@ -1,11 +1,11 @@
 ﻿// Level config
 FoodChain.playLevels = [
-	{ flies: 2, rocks: 2, snakes: 0, time: 30 },   // Level 1
-	{ flies: 2, rocks: 3, snakes: 0, time: 40 },   // Level 2
-	{ flies: 3, rocks: 3, snakes: 0, time: 60 },   // Level 3
-	{ flies: 3, rocks: 4, snakes: 1, time: 90 },   // Level 4
-	{ flies: 4, rocks: 4, snakes: 1, time: 120 },  // Level 5
-	{ flies: 4, rocks: 3, snakes: 2, time: 140 },  // Level 6
+	{ flies: 2, rocks: 2, snakes: 0, time: 15 },   // Level 1
+	{ flies: 2, rocks: 3, snakes: 0, time: 10 },   // Level 2
+	{ flies: 3, rocks: 3, snakes: 0, time: 15 },   // Level 3
+	{ flies: 3, rocks: 4, snakes: 1, time: 30 },   // Level 4
+	{ flies: 4, rocks: 4, snakes: 1, time: 40 },  // Level 5
+	{ flies: 3, rocks: 3, snakes: 2, time: 50 },  // Level 6
 ];
 
 // Key to use
@@ -20,11 +20,17 @@ FoodChain.playKeys = [
 	{ key: 108, heading: 270, dx: 0, dy: 1 }
 ];
 
+// Compute play area size
+FoodChain.playArea = {
+	width: FoodChain.getConfig("screen-width")-40,
+	height: FoodChain.getConfig("screen-height")-300
+};
+
 // Play Game class
 enyo.kind({
 	name: "FoodChain.PlayGame",
 	kind: enyo.Control,
-	published: {level: 1},
+	published: {level: 1, life: 3},
 	classes: "board",
 	components: [
 		{ name: "cards", components: [
@@ -35,16 +41,16 @@ enyo.kind({
 					{ kind: "Image", classes: "life", src:"images/frog9.png" }
 				]},				
 			{ components: [
-				{ content: "Level", classes: "title level-value" },
+				{ content: __$FC("Level"), classes: "title level-value" },
 				{ name: "level", content: "0", classes: "title level-value" },
-				{ content: "Score:", classes: "title score" },
+				{ content: __$FC("Score:"), classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},	
 			
 			// Playing zone
-			{ classes: "game-box", components: [
-				{kind: "Canvas", name: "canvas", ontap: "clickToMove", attributes: {width: 1174, height: 600}}
+			{ classes: "game-box", style: "width:"+FoodChain.playArea.width+"px; height:"+FoodChain.playArea.height+"px;", components: [
+				{kind: "Canvas", name: "canvas", ontap: "clickToMove", attributes: {width: FoodChain.playArea.width, height: FoodChain.playArea.height}}
 			]},
 			
 			// Buttons bar
@@ -85,10 +91,9 @@ enyo.kind({
 		this.inherited(arguments);
 		this.imagesToLoad = 20;
 		this.nextaction = 0;
-		this.life = 3;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
-		this.createComponent({ name: "timerFlies", kind: "Timer", baseInterval: 500, onTriggered: "fliesEngine" }, {owner: this});		
-		this.createComponent({ name: "timerSnakes", kind: "Timer", baseInterval: 800, onTriggered: "snakesEngine" }, {owner: this});			
+		this.createComponent({ name: "timerMonster", kind: "Timer", baseInterval: 500, onTriggered: "monsterEngine" }, {owner: this});
+		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
 	},
 	
@@ -96,8 +101,9 @@ enyo.kind({
 	levelChanged: function() {
 
 		// Init frog
+		FoodChain.context.level = this.level;
 		this.frog = new Sprite({
-			x: 70, y: 280, heading: 0, images: ["frog1", "frog2", "frog3", "frog4", "frog5", "frog6", "frog7", "frog8", "frog9"],
+			x: 70, y: (FoodChain.playArea.height/2)-20, heading: 0, images: ["frog1", "frog2", "frog3", "frog4", "frog5", "frog6", "frog7", "frog8", "frog9"],
 			width: 116, height: 172, index: 0, sound: "audio/frog"
 		});
 		this.frog.alive = true;
@@ -109,8 +115,8 @@ enyo.kind({
 			var rock = FoodChain.createWithCondition(
 				// Create randomly a new rock...
 				function() {
-					var x = 100+Math.floor(Math.random()*900);
-					var y = 100+Math.floor(Math.random()*400);
+					var x = 130+Math.floor(Math.random()*(FoodChain.playArea.width-300));
+					var y = 130+Math.floor(Math.random()*(FoodChain.playArea.height-200));
 					var h = Math.floor(Math.random()*4)*90;
 					return new Sprite({
 						x: x, y: y, heading: h, images: ["rock"], width: 115, height: 104, index: 0
@@ -135,8 +141,8 @@ enyo.kind({
 			var fly = FoodChain.createWithCondition(
 				// Create randomly a new fly...
 				function() {
-					var x = 100+Math.floor(Math.random()*900);
-					var y = 100+Math.floor(Math.random()*400);
+					var x = 100+Math.floor(Math.random()*(FoodChain.playArea.width-300));
+					var y = 100+Math.floor(Math.random()*(FoodChain.playArea.height-200));					
 					var h = Math.floor(Math.random()*4)*90;
 					return new Sprite({
 						x: x, y: y, heading: h, images: ["fly1", "fly2"], width: 58, height: 86, index: 0, sound: "audio/flies"
@@ -268,7 +274,6 @@ enyo.kind({
 		this.frog.unDraw(this.ctx);		
 		if (newHeading != this.frog.getHeading()) {
 			// Just change heading
-			this.frog.playSound();
 			this.frog.setHeading(newHeading);
 			this.frog.firstImage();
 		} else {
@@ -340,6 +345,15 @@ enyo.kind({
 		return true;
 	},
 	
+	// Periodic engine wake up for flies and snakes
+	monsterEngine: function() {
+		// Flies engine
+		this.fliesEngine();
+		
+		// Snakes engine
+		this.snakesEngine();
+	},
+	
 	// Flies engine: move and sound flies periodically
 	fliesEngine: function() {		
 		// Game paused
@@ -357,39 +371,42 @@ enyo.kind({
 			
 			// Move the fly
 			if (n == 1) {
-				// Ensure not on a rock, on the frog or on other fly
-				var currentfly = this.flies[i];
-				var dummyfly = FoodChain.createWithCondition(
-					// Create randomly a new fly...
-					function() {
-						var x = 100+Math.floor(Math.random()*900);
-						var y = 100+Math.floor(Math.random()*400);
-						var h = Math.floor(Math.random()*4)*90;
-						return new Sprite({x: x, y: y, heading: h, width: 58, height: 86});
-					},
-					
-					// ... while don't intersect with ...
-					function(n, s) {
-						return s == currentfly || !n.intersect(s);
-					},
-					
-					// ... other rocks, flies and frog
-					enyo.cloneArray(this.rocks).concat(this.flies).concat(this.frog)
-				);				
-				
-				// Redraw
-				this.flies[i].unDraw(this.ctx);
-				this.flies[i].setX(dummyfly.getX());
-				this.flies[i].setY(dummyfly.getY());
-				this.flies[i].setHeading(dummyfly.getHeading());
-				this.flies[i].draw(this.ctx);
-				this.flies[i].playSound();
-			
-			// Just animate
-			} else if (n <= 4) {
+				this.moveFly(this.flies[i]);			
+			// Just animate the fly
+			} else if (n <= 2) {
 				this.flies[i].animate(this.ctx, [0, 1, 0, 1, 0, 1], 0, 0, enyo.bind(this, "testFlyDead"));			
 			}
 		}
+	},
+	
+	// Move the fly due to periodic change or snake collision
+	moveFly: function(fly) {
+		var currentfly = fly;
+		var dummyfly = FoodChain.createWithCondition(
+			// Create randomly a new fly...
+			function() {
+				var x = 100+Math.floor(Math.random()*(FoodChain.playArea.width-300));
+				var y = 100+Math.floor(Math.random()*(FoodChain.playArea.height-200));
+				var h = Math.floor(Math.random()*4)*90;
+				return new Sprite({x: x, y: y, heading: h, width: 58, height: 86});
+			},
+			
+			// ... while don't intersect with ...
+			function(n, s) {
+				return s == currentfly || !n.intersect(s);
+			},
+			
+			// ... other rocks, flies, frog and snakes
+			enyo.cloneArray(this.rocks).concat(this.flies).concat(this.frog).concat(this.snakes)
+		);				
+		
+		// Redraw
+		currentfly.unDraw(this.ctx);
+		currentfly.setX(dummyfly.getX());
+		currentfly.setY(dummyfly.getY());
+		currentfly.setHeading(dummyfly.getHeading());
+		currentfly.draw(this.ctx);
+		currentfly.playSound();	
 	},
 
 	// Snake engine: create and animate snake periodically
@@ -401,7 +418,7 @@ enyo.kind({
 		// For each snake
 		for(var i = 0 ; i < this.snakes.length ; i++) {	
 			// Randomly decide what to do
-			var n = Math.floor(Math.random()*3);
+			var n = Math.floor(Math.random()*4);
 			if (n != 0)
 				continue;
 			
@@ -415,31 +432,36 @@ enyo.kind({
 				
 			// Snake out of game, reintroduce it
 			if (!currentsnake.alive) {
-				// Ensure not on a rock trajectory
-				var dummysnake = FoodChain.createWithCondition(
-					// Create randomly a new snake...
-					function() {
-						var x = 100+Math.floor(Math.random()*900);
-						var h = (Math.floor(Math.random()*2) == 0) ? 90 : 270;
-						var y = (h == 90) ? maxheight : 0;
-						return new Sprite({x: x, y: y, heading: h, width: 100, height: 250});
-					},
+
+				// Compute trajectory free of rock & snakes interval
+				var spritesToAvoid = enyo.cloneArray(this.rocks).concat(this.snakes);
+				var freeInterval = [];
+				for (var x = 100 ; x < FoodChain.playArea.width-300 ; x = x + 50) {
+					// Compute is this interval is free
+					var free = true;
+					for (var j = 0 ; free && j < spritesToAvoid.length ; j++) {
+						// Test each sprite
+						var s = spritesToAvoid[j];
+						if (s == currentsnake) continue;
+						if ((x > s.getX() && x-currentsnake.width/2 < s.getX()+s.width/2) || (x < s.getX() && x+currentsnake.width/2 > s.getX()-s.width/2)) {
+							free = false;
+						}
+					}
 					
-					// ... while not in a same column that ...
-					function(n, s) {
-						return s == currentsnake ||
-							!((n.getX() > s.getX() && n.getX()-n.width/2 < s.getX()+s.width/2) ||
-							(n.getX() < s.getX() && n.getX()+n.width/2 > s.getX()-s.width/2)) 						
-					},
-					
-					// ... a rock or another snake
-					enyo.cloneArray(this.rocks).concat(this.snakes)
-				);
+					// No, add to busyList
+					if (free)
+					freeInterval.push(x);
+				}
+
+				// Compute the snake position
+				x = freeInterval[Math.floor(Math.random()*freeInterval.length)];
+				var h = (Math.floor(Math.random()*2) == 0) ? 90 : 270;
+				var y = (h == 90) ? maxheight : 0;
 
 				// Set alive and launch animation
-				currentsnake.setX(dummysnake.getX());
-				currentsnake.setY(dummysnake.getY());
-				currentsnake.setHeading(dummysnake.getHeading());
+				currentsnake.setX(x);
+				currentsnake.setY(y);
+				currentsnake.setHeading(h);
 				currentsnake.alive = true;
 				currentsnake.playSound();
 				var dy = (currentsnake.getHeading() == 90) ? -6 : 6;
@@ -465,13 +487,22 @@ enyo.kind({
 			}
 			
 			// Yes, frog is dead
+			this.frog.alive = false;			
 			this.frog.unDraw(this.ctx);			
 			this.frog.useImage(7);
 			this.frog.draw(this.ctx);
-			this.frog.alive = false;
 			this.testEndOfGame();
 			return true;		
 		}
+		
+		// Test if eat a fly
+		for(var i = 0 ; i < this.flies.length ; i++) {
+			if (this.flies[i].alive && snake.intersect(this.flies[i])) {
+				// Yes move the fly	
+				this.moveFly(this.flies[i]);
+				return true;
+			}
+		}		
 		
 		return true;
 	},
@@ -548,7 +579,7 @@ enyo.kind({
 			this.nextaction = 0;
 			this.frog.unDraw(this.ctx);
 			this.frog.setX(70);
-			this.frog.setY(280);
+			this.frog.setY((FoodChain.playArea.height/2)-20);
 			this.frog.setHeading(0);
 			this.frog.useImage(0);
 			this.frog.draw(this.ctx);
@@ -606,7 +637,7 @@ enyo.kind({
 	},
 	
 	// Pause game
-	pause: function() {
+	pause: function() {	
 		this.$.timer.pause();
 		this.$.pause.hide();
 		this.$.play.show();
@@ -623,8 +654,7 @@ enyo.kind({
 	// Go to the home page of the app
 	home: function() {
 		this.$.timer.stop();	
-		this.$.timerFlies.stop();	
-		this.$.timerSnakes.stop();	
+		this.$.timerMonster.stop();	
 		FoodChain.goHome();
 	}
 });

@@ -40,9 +40,9 @@ enyo.kind({
 		// Create game description
 		this.$.popup.hide();
 		this.games = [];
-		this.games["one"] = { title: "Learn", description: "Set cards in the right box to learn what sort of food each animal eat." };
-		this.games["two"] = { title: "Build", description: "Set cards in the right order to build the right food chain." };
-		this.games["three"] = { title: "Play", description: "Play the food chain: eat and avoid being eaten." };
+		this.games["one"] = { title: __$FC("Learn"), description:  __$FC("Set cards in the right box to learn what sort of food each animal eat.") };
+		this.games["two"] = { title: __$FC("Build"), description:  __$FC("Set cards in the right order to build the right food chain.") };
+		this.games["three"] = { title: __$FC("Play"), description:  __$FC("Play the food chain: eat and avoid being eaten.") };
 		
 		// Init soundtrack
 		this.soundtrack = "audio/popcorn";
@@ -53,14 +53,34 @@ enyo.kind({
 		// Pick randomly N cards
 		this.cardcount = 0;
 		this.cards = [];
-		for (var i = 0 ; i < 12 ; i++) {
+		var i = 0;
+		while (i < 12) {
 			var index = Math.floor(Math.random()*FoodChain.cards.length); 
-			this.cards.push(FoodChain.cards[index]);
+			var found = false;
+			for (var j = 0 ; !found && j < this.cards.length-1 ; j++) {
+				if (this.cards[j] == FoodChain.cards[index]) found = true;
+			}
+			if (!found) {
+				this.cards.push(FoodChain.cards[index]);
+				i++;
+			}
 		}
 	},
 	
 	// Play soundtrack when rendered and restart at end
 	rendered: function() {
+		// Context not null, resume the game previously stopped
+		if (FoodChain.context.game != "") {
+			enyo.create({
+				kind: FoodChain.context.game, 
+				level: FoodChain.context.level
+			}).renderInto(document.getElementById("body"));
+			return true;
+		}
+
+		// Update context, no game playing
+		FoodChain.context.game = "";
+		
 		// Play soundtrack
 		FoodChain.sound.play(this.soundtrack);
 		
@@ -117,20 +137,24 @@ enyo.kind({
 		FoodChain.sound.pause();
 		this.$.timer.stop();
 		this.removeComponent(this.$.timer);
-		
+
 		// Launch Learn game
+		var game;
 		if (s.name == "one") {
-			new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
+			game = new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = game.kindName;
 		}
 		
 		// Launch Build game
 		else if (s.name == "two") {
-			new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
+			game = new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = game.kindName;			
 		}
 		
 		// Launch Play game
 		else if (s.name == "three") {
-			new FoodChain.PlayGame({level: 1}).renderInto(document.getElementById("body"));
+			game = new FoodChain.PlayGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = game.kindName;
 		}		
 	}
 });

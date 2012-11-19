@@ -1,11 +1,11 @@
 ﻿// Level config
 FoodChain.learnLevels = [
-	{ size: 2, count: 5, time: 40 },  // Level 1
-	{ size: 2, count: 10, time: 60 }, // Level 2
-	{ size: 2, count: 15, time: 80 }, // Level 3
-	{ size: 3, count: 5, time: 40 },  // Level 4
-	{ size: 3, count: 10, time: 60 }, // Level 5
-	{ size: 3, count: 15, time: 80 }  // Level 6
+	{ size: 2, count: 5, time: 10 },  // Level 1
+	{ size: 2, count: 10, time: 15 }, // Level 2
+	{ size: 2, count: 15, time: 20 }, // Level 3
+	{ size: 3, count: 5, time: 10 },  // Level 4
+	{ size: 3, count: 10, time: 15 }, // Level 5
+	{ size: 3, count: 15, time: 20 }  // Level 6
 ];
 
 // Learn Game class
@@ -18,9 +18,9 @@ enyo.kind({
 		{ name: "cards", components: [
 			// Level - Score - Time bar
 			{ components: [
-				{ content: "Level", classes: "title level-value" },
+				{ content: __$FC("Level"), classes: "title level-value" },
 				{ name: "level", content: "0", classes: "title level-value" },
-				{ content: "Score:", classes: "title score" },
+				{ content: __$FC("Score:"), classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},	
@@ -56,6 +56,7 @@ enyo.kind({
 		this.cardlist = null;
 		this.nextaction = 0;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
+		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
 	},
 	
@@ -63,6 +64,7 @@ enyo.kind({
 	levelChanged: function() {
 		
 		// Box handling
+		FoodChain.context.level = this.level;
 		if (FoodChain.learnLevels[this.level-1].size == 2) {
 			FoodChain.addRemoveClass(this.$.herbbox, "herb-box-two", "herb-box-three");
 			FoodChain.addRemoveClass(this.$.carnbox, "carn-box-two", "carn-box-three");
@@ -74,9 +76,9 @@ enyo.kind({
 			FoodChain.addRemoveClass(this.$.omnibox, "omni-box-three", "omni-box-two");			
 			this.$.omnibox.show();
 		}
-		this.$.herbname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[0].name));
-		this.$.carnname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[1].name));
-		this.$.omniname.setContent(FoodChain.firstLetterCase(FoodChain.feedStrategy[2].name));		
+		this.$.herbname.setContent(__$FC(FoodChain.feedStrategy[0].name));
+		this.$.carnname.setContent(__$FC(FoodChain.feedStrategy[1].name));
+		this.$.omniname.setContent(__$FC(FoodChain.feedStrategy[2].name));		
 		this.dragobject = null;
 		this.selectedobject = null;
 		
@@ -174,6 +176,8 @@ enyo.kind({
 	
 	// Play sound when card taped, set card as selected (avoid need of drag&drop)
 	taped: function(s, e) {
+		if (this.$.timer.paused)
+			return true;
 		FoodChain.sound.play(s.sound);
 		FoodChain.log(s.cardname+" taped");
 		this.selectedobject = s;
@@ -182,6 +186,8 @@ enyo.kind({
 	
 	// Card drag start, change style to dragged
 	dragstart: function(s, e) {
+		if (this.$.timer.paused)
+			return true;	
 		s.addClass("card-dragged");
 		this.$.startbox.addClass("box-dragging");
 		this.$.herbbox.addClass("box-dragging");
@@ -221,7 +227,7 @@ enyo.kind({
 	
 	// Dropped in the box, check if correct
 	drop: function(s, e) {
-		if (this.dragobject == null)
+		if (this.dragobject == null || this.$.timer.paused)
 			return true;		
 		e.preventDefault();
 		

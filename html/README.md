@@ -48,4 +48,6 @@ Contains all music and sound files.
 
 Contains all images.
 
+## /html/css
 
+Styles sheet for different platforms.
