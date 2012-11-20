@@ -1,6 +1,6 @@
 [Activity]
 name = FoodChain
-activity_version = 1
+activity_version = 2
 bundle_id = org.olpcfrance.FoodChain
 exec = sugar-activity activity.FoodChainActivity
 icon = activity-foodchain

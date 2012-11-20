@@ -26,6 +26,15 @@ FoodChain.playArea = {
 	height: FoodChain.getConfig("screen-height")-300
 };
 
+// Sprite size constant
+FoodChain.sprites = {
+	frog: { dx: 100, dy: 152 },
+	rock: { dx: 112, dy: 101 },
+	fly: { dx: 50, dy: 80 },
+	snake: { dx: 100, dy: 250 }
+};
+
+
 // Play Game class
 enyo.kind({
 	name: "FoodChain.PlayGame",
@@ -104,7 +113,7 @@ enyo.kind({
 		FoodChain.context.level = this.level;
 		this.frog = new Sprite({
 			x: 70, y: (FoodChain.playArea.height/2)-20, heading: 0, images: ["frog1", "frog2", "frog3", "frog4", "frog5", "frog6", "frog7", "frog8", "frog9"],
-			width: 116, height: 172, index: 0, sound: "audio/frog"
+			width: FoodChain.sprites.frog.dx, height: FoodChain.sprites.frog.dy, index: 0, sound: "audio/frog"
 		});
 		this.frog.alive = true;
 		
@@ -119,7 +128,7 @@ enyo.kind({
 					var y = 130+Math.floor(Math.random()*(FoodChain.playArea.height-200));
 					var h = Math.floor(Math.random()*4)*90;
 					return new Sprite({
-						x: x, y: y, heading: h, images: ["rock"], width: 115, height: 104, index: 0
+						x: x, y: y, heading: h, images: ["rock"], width: FoodChain.sprites.rock.dx, height: FoodChain.sprites.rock.dy, index: 0
 					});
 				},
 				
@@ -145,7 +154,7 @@ enyo.kind({
 					var y = 100+Math.floor(Math.random()*(FoodChain.playArea.height-200));					
 					var h = Math.floor(Math.random()*4)*90;
 					return new Sprite({
-						x: x, y: y, heading: h, images: ["fly1", "fly2"], width: 58, height: 86, index: 0, sound: "audio/flies"
+						x: x, y: y, heading: h, images: ["fly1", "fly2"], width: FoodChain.sprites.fly.dx, height: FoodChain.sprites.fly.dy, index: 0, sound: "audio/flies"
 					});
 				},
 				
@@ -168,7 +177,7 @@ enyo.kind({
 		for(var i = 0 ; i < FoodChain.playLevels[this.level-1].snakes ; i++) {
 			var snake = new Sprite({
 				x: 0, y: 0, heading: 0, images: ["snake1", "snake2", "snake3", "snake4", "snake5", "snake6", "snake7", "snake8"], 
-				width: 100, height: 250, index: 0, sound: "audio/snake"
+				width: FoodChain.sprites.snake.dx, height: FoodChain.sprites.snake.dy, index: 0, sound: "audio/snake"
 			});
 			snake.alive = false;
 			this.snakes.push(snake);
@@ -241,7 +250,7 @@ enyo.kind({
 	},
 	
 	// A key was pressed
-	keyPressed: function(s,e) {
+	keyPressed: function(s, e) {
 		var key = e.charCode;
 		
 		// Game paused
@@ -388,7 +397,7 @@ enyo.kind({
 				var x = 100+Math.floor(Math.random()*(FoodChain.playArea.width-300));
 				var y = 100+Math.floor(Math.random()*(FoodChain.playArea.height-200));
 				var h = Math.floor(Math.random()*4)*90;
-				return new Sprite({x: x, y: y, heading: h, width: 58, height: 86});
+				return new Sprite({x: x, y: y, heading: h, width: FoodChain.sprites.fly.dx, height: FoodChain.sprites.fly.dy});
 			},
 			
 			// ... while don't intersect with ...
