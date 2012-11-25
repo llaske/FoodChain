@@ -3,14 +3,14 @@ FoodChain.cards = [
 	"alligator", "animal", "bat", "bee", "bird", "camel", "cat", "chicken", "chimp",
 	"clam", "corn", "cow", "crab", "crocodile", "crow", "dog", "duck", "fish", "flies",
 	"fox", "frog", "giraffe", "goat", "grass", "hay", "hen", "lamb", "mice", "mole",
-	"mule", "owl", "ox", "pig", "rat", "shark", "shrimp", "skunk", "snail", "snake",
-	"spider", "spike", "squid", "squirrel", "starfish", "swan", "tick", "wheat"
+	"mosquito", "mule", "owl", "ox", "pig", "rat", "shark", "shrimp", "skunk", "snail",
+	"snake", "spider", "spike", "squid", "squirrel", "starfish", "swan", "tick", "wheat"
 ];
 
 // Feed strategy list and members
 FoodChain.feedStrategy = [
 	{ name: "herbivore", members: ["swan", "bee", "cow", "giraffe", "squirrel", "goat", "ox", "lamb", "mule", "camel", "chimp"] },
-	{ name: "carnivore", members: ["mole", "spike", "tick", "squid", "crab", "owl", "snake", "dog", "alligator", "bat", "crocodile", "frog", "shark", "spider", "starfish", "crocodile"] },
+	{ name: "carnivore", members: ["mosquito", "mole", "spike", "tick", "squid", "crab", "owl", "snake", "dog", "alligator", "bat", "crocodile", "frog", "shark", "spider", "starfish", "crocodile"] },
 	{ name: "omnivore", members: ["duck", "flies", "pig", "mice", "rat", "skunk", "chicken", "hen", "fox"] }
 ];
 
@@ -18,13 +18,18 @@ FoodChain.feedStrategy = [
 FoodChain.validChains = [
 	["snake", "mice", "corn"],
 	["cat", "mice", "corn"],
+	["fox", "bird", "spider", "mosquito"],
 	["fox", "bird", "spider", "flies"],
 	["fox", "duck", "frog", "flies"],
+	["snake", "frog", "mosquito"],
 	["snake", "frog", "flies"],
 	["fox", "duck", "frog", "snail", "grass"],
+	["spike", "spider", "mosquito"],
 	["spike", "spider", "flies"],
 	["shark", "fish", "shrimp"],
+	["owl", "bat", "mosquito"],
 	["owl", "bat", "flies"],
+	["cat", "bat", "mosquito"],
 	["cat", "bat", "flies"],
 	["fox", "hen", "corn"],
 	["fox", "chicken", "corn"],

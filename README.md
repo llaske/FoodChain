@@ -22,6 +22,10 @@ Contains Python code (activity.py) and the framework to communicate between Pyth
 
 Contains the Sugar manifest manifest to describe the activity.
 
+## /po & /locale
+
+Localization files.
+
 ## /html
 
 All the HTML5/JavaScript is in this directory. 
@@ -46,5 +50,9 @@ Contains all music and sound files.
 ## /html/images
 
 Contains all images.
+
+## /html/css
+
+CSS need for different platforms.
 
 

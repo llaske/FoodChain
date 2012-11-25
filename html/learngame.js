@@ -18,9 +18,9 @@ enyo.kind({
 		{ name: "cards", components: [
 			// Level - Score - Time bar
 			{ components: [
-				{ content: __$FC("Level"), classes: "title level-value" },
+				{ name: "textlevel", classes: "title level-value" },
 				{ name: "level", content: "0", classes: "title level-value" },
-				{ content: __$FC("Score:"), classes: "title score" },
+				{ name: "textscore", classes: "title score" },
 				{ name: "score", content: "0000", classes: "title score-value" },
 				{ name: "timercount", content: "0:0,0", classes: "title timer-value" }				
 			]},	
@@ -56,6 +56,8 @@ enyo.kind({
 		this.cardlist = null;
 		this.nextaction = 0;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
+		this.$.textlevel.setContent(__$FC("level"));
+		this.$.textscore.setContent(__$FC("score"));
 		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
 	},

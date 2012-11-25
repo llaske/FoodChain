@@ -70,6 +70,7 @@ FoodChain.goHome = function() {
 
 // Sugar interface
 FoodChain.sugar = new Sugar();
+FoodChain.sugar.connect("localization", __$FC_l10n_set);
 FoodChain.sugar.connect("save-context", FoodChain.saveContext);
 FoodChain.sugar.connect("load-context", FoodChain.loadContext);
 FoodChain.log = function(msg) {

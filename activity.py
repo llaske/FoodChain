@@ -28,6 +28,8 @@ from datetime import date
 
 from enyo import Enyo
 
+from l10n import _fc_l10n
+
 
 # Init log
 _logger = logging.getLogger('roots-activity')
@@ -66,7 +68,8 @@ class FoodChainActivity(activity.Activity):
         self.consoleview.scroll_mark_onscreen(self.console.get_insert())
 
     def init_context(self, args):
-        "Init Javascript context sending information about saved game"
+        "Init Javascript context sending information about localization and saved game"
+        self.enyo.send_message("localization", _fc_l10n)
         self.enyo.send_message("load-context", self.context)
 
     def make_mainview(self):
@@ -162,7 +165,6 @@ class FoodChainActivity(activity.Activity):
             file.write(str(context['score'])+'\n')
             file.write(context['game']+'\n')
             file.write(str(context['level'])+'\n')
-            file.write(str(context['life'])+'\n')
         finally:
             file.close()
 
@@ -175,7 +177,6 @@ class FoodChainActivity(activity.Activity):
             self.context['score'] = file.readline().strip('\n')
             self.context['game'] = file.readline().strip('\n')
             self.context['level'] = file.readline().strip('\n')
-            self.context['life'] = file.readline().strip('\n')
         finally:
             file.close()
 

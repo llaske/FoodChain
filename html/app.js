@@ -40,9 +40,9 @@ enyo.kind({
 		// Create game description
 		this.$.popup.hide();
 		this.games = [];
-		this.games["one"] = { title: __$FC("Learn"), description:  __$FC("Set cards in the right box to learn what sort of food each animal eat.") };
-		this.games["two"] = { title: __$FC("Build"), description:  __$FC("Set cards in the right order to build the right food chain.") };
-		this.games["three"] = { title: __$FC("Play"), description:  __$FC("Play the food chain: eat and avoid being eaten.") };
+		this.games["one"] = { title: __$FC("learn"), description:  __$FC("learndesc") };
+		this.games["two"] = { title: __$FC("build"), description:  __$FC("builddesc") };
+		this.games["three"] = { title: __$FC("play"), description:  __$FC("playdesc") };
 		
 		// Init soundtrack
 		this.soundtrack = "audio/popcorn";

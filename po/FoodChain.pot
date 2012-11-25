@@ -1,0 +1,273 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-25 10:41-0700\n"
+"PO-Revision-Date: 2012-11-25 11:41-0700\n"
+"Last-Translator: Lionel Laské <lionel@olpc-france.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: l10n.py:9
+msgid "en"
+msgstr ""
+
+#: l10n.py:10
+msgid "Learn"
+msgstr ""
+
+#: l10n.py:11
+msgid "Build"
+msgstr ""
+
+#: l10n.py:12
+msgid "Play"
+msgstr ""
+
+#: l10n.py:13
+msgid "Set cards in the right box to learn what sort of food each animal eat."
+msgstr "."
+
+#: l10n.py:14
+msgid "Set cards in the right order to build the right food chain."
+msgstr ""
+
+#: l10n.py:15
+msgid "Play the food chain: eat and avoid being eaten."
+msgstr ""
+
+#: l10n.py:16
+msgid "Level"
+msgstr ""
+
+#: l10n.py:17
+msgid "Score:"
+msgstr ""
+
+#: l10n.py:18
+msgid "concept & code:"
+msgstr ""
+
+#: l10n.py:19
+msgid "arts:"
+msgstr ""
+
+#: l10n.py:20
+msgid "music:"
+msgstr ""
+
+#: l10n.py:21
+msgid "sound effects:"
+msgstr ""
+
+#: l10n.py:22
+msgid "Alligator"
+msgstr ""
+
+#: l10n.py:23
+msgid "Animal"
+msgstr ""
+
+#: l10n.py:24
+msgid "Bat"
+msgstr ""
+
+#: l10n.py:25
+msgid "Bee"
+msgstr ""
+
+#: l10n.py:26
+msgid "Bird"
+msgstr ""
+
+#: l10n.py:27
+msgid "Camel"
+msgstr ""
+
+#: l10n.py:28
+msgid "Cat"
+msgstr ""
+
+#: l10n.py:29
+msgid "Chicken"
+msgstr ""
+
+#: l10n.py:30
+msgid "Chimp"
+msgstr ""
+
+#: l10n.py:31
+msgid "Clam"
+msgstr ""
+
+#: l10n.py:32
+msgid "Corn"
+msgstr ""
+
+#: l10n.py:33
+msgid "Cow"
+msgstr ""
+
+#: l10n.py:34
+msgid "Crab"
+msgstr ""
+
+#: l10n.py:35
+msgid "Crocodile"
+msgstr ""
+
+#: l10n.py:36
+msgid "Crow"
+msgstr ""
+
+#: l10n.py:37
+msgid "Dog"
+msgstr ""
+
+#: l10n.py:38
+msgid "Duck"
+msgstr ""
+
+#: l10n.py:39
+msgid "Fish"
+msgstr ""
+
+#: l10n.py:40
+msgid "Flies"
+msgstr ""
+
+#: l10n.py:41
+msgid "Fox"
+msgstr ""
+
+#: l10n.py:42
+msgid "Frog"
+msgstr ""
+
+#: l10n.py:43
+msgid "Giraffe"
+msgstr ""
+
+#: l10n.py:44
+msgid "Goat"
+msgstr ""
+
+#: l10n.py:45
+msgid "Grass"
+msgstr ""
+
+#: l10n.py:46
+msgid "Hay"
+msgstr ""
+
+#: l10n.py:47
+msgid "Hen"
+msgstr ""
+
+#: l10n.py:48
+msgid "Lamb"
+msgstr ""
+
+#: l10n.py:49
+msgid "Mice"
+msgstr ""
+
+#: l10n.py:50
+msgid "Mole"
+msgstr ""
+
+#: l10n.py:51
+msgid "Mosquito"
+msgstr ""
+
+#: l10n.py:52
+msgid "Mule"
+msgstr ""
+
+#: l10n.py:53
+msgid "Owl"
+msgstr ""
+
+#: l10n.py:54
+msgid "Ox"
+msgstr ""
+
+#: l10n.py:55
+msgid "Pig"
+msgstr ""
+
+#: l10n.py:56
+msgid "Rat"
+msgstr ""
+
+#: l10n.py:57
+msgid "Shark"
+msgstr ""
+
+#: l10n.py:58
+msgid "Shrimp"
+msgstr ""
+
+#: l10n.py:59
+msgid "Skunk"
+msgstr ""
+
+#: l10n.py:60
+msgid "Snail"
+msgstr ""
+
+#: l10n.py:61
+msgid "Snake"
+msgstr ""
+
+#: l10n.py:62
+msgid "Spider"
+msgstr ""
+
+#: l10n.py:63
+msgid "Spike"
+msgstr ""
+
+#: l10n.py:64
+msgid "Squid"
+msgstr ""
+
+#: l10n.py:65
+msgid "Squirrel"
+msgstr ""
+
+#: l10n.py:66
+msgid "Starfish"
+msgstr ""
+
+#: l10n.py:67
+msgid "Swan"
+msgstr ""
+
+#: l10n.py:68
+msgid "Tick"
+msgstr ""
+
+#: l10n.py:69
+msgid "Wheat"
+msgstr ""
+
+#: l10n.py:70
+msgid "Herbivore"
+msgstr ""
+
+#: l10n.py:71
+msgid "Carnivore"
+msgstr ""
+
+#: l10n.py:72
+msgid "Omnivore"
+msgstr ""
