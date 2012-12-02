@@ -56,10 +56,24 @@ enyo.kind({
 		this.cardlist = null;
 		this.nextaction = 0;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
-		this.$.textlevel.setContent(__$FC("level"));
-		this.$.textscore.setContent(__$FC("score"));
+		this.setLocale();
 		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
+	},
+	
+	// Localization changed, update cards and string resource
+	setLocale: function() {
+		// Update string resources
+		this.$.textlevel.setContent(__$FC("level"));
+		this.$.textscore.setContent(__$FC("score"));
+		this.$.herbname.setContent(__$FC(FoodChain.feedStrategy[0].name));
+		this.$.carnname.setContent(__$FC(FoodChain.feedStrategy[1].name));
+		this.$.omniname.setContent(__$FC(FoodChain.feedStrategy[2].name));			
+		
+		// Update cards
+		enyo.forEach(this.$.startbox.getControls(), function(card) {
+			card.setLocale();
+		});		
 	},
 	
 	// Level changed, init board then start game
@@ -77,10 +91,7 @@ enyo.kind({
 			FoodChain.addRemoveClass(this.$.carnbox, "carn-box-three", "carn-box-two");
 			FoodChain.addRemoveClass(this.$.omnibox, "omni-box-three", "omni-box-two");			
 			this.$.omnibox.show();
-		}
-		this.$.herbname.setContent(__$FC(FoodChain.feedStrategy[0].name));
-		this.$.carnname.setContent(__$FC(FoodChain.feedStrategy[1].name));
-		this.$.omniname.setContent(__$FC(FoodChain.feedStrategy[2].name));		
+		}	
 		this.dragobject = null;
 		this.selectedobject = null;
 		

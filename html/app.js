@@ -40,12 +40,23 @@ enyo.kind({
 		// Create game description
 		this.$.popup.hide();
 		this.games = [];
-		this.games["one"] = { title: __$FC("learn"), description:  __$FC("learndesc") };
-		this.games["two"] = { title: __$FC("build"), description:  __$FC("builddesc") };
-		this.games["three"] = { title: __$FC("play"), description:  __$FC("playdesc") };
+		this.setLocale();
 		
 		// Init soundtrack
 		this.soundtrack = "audio/popcorn";
+	},
+	
+	// Localization, changed update cards and description
+	setLocale: function() {
+		// Update description
+		this.games["one"] = { title: __$FC("learn"), description:  __$FC("learndesc") };
+		this.games["two"] = { title: __$FC("build"), description:  __$FC("builddesc") };
+		this.games["three"] = { title: __$FC("play"), description:  __$FC("playdesc") };	
+		
+		// Change card localization if any
+		enyo.forEach(this.$.cardbox.getControls(), function(card) {
+			card.setLocale();
+		});
 	},
 	
 	// Init card stack for the animation
@@ -71,7 +82,7 @@ enyo.kind({
 	rendered: function() {
 		// Context not null, resume the game previously stopped
 		if (FoodChain.context.game != "") {
-			enyo.create({
+			FoodChain.context.object = enyo.create({
 				kind: FoodChain.context.game, 
 				level: FoodChain.context.level
 			}).renderInto(document.getElementById("body"));
@@ -80,6 +91,7 @@ enyo.kind({
 
 		// Update context, no game playing
 		FoodChain.context.game = "";
+		FoodChain.context.object = this;
 		
 		// Play soundtrack
 		FoodChain.sound.play(this.soundtrack);
@@ -104,7 +116,7 @@ enyo.kind({
 		}
 		
 		// Display a new card
-		var x = Math.floor(Math.random()*1000);
+		var x = Math.floor(Math.random()*(FoodChain.getConfig("screen-width")-FoodChain.getConfig("card-width")));
 		var y = Math.floor(Math.random()*400);
 		this.$.cardbox.createComponent({ kind: "FoodChain.Card", cardname: this.cards[this.cardcount], x: x, y: y, z: 0}).render();
 		this.cardcount = this.cardcount + 1;
@@ -127,7 +139,9 @@ enyo.kind({
 	
 	// Show credit page
 	showCredits: function() {
-		new FoodChain.Credits().renderInto(document.getElementById("body"));	
+		this.$.timer.stop();
+		this.removeComponent(this.$.timer);	
+		FoodChain.context.object = new FoodChain.Credits().renderInto(document.getElementById("body"));	
 	},
 	
 	// Launch a game
@@ -139,22 +153,21 @@ enyo.kind({
 		this.removeComponent(this.$.timer);
 
 		// Launch Learn game
-		var game;
 		if (s.name == "one") {
-			game = new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
-			FoodChain.context.game = game.kindName;
+			FoodChain.context.object = new FoodChain.LearnGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = FoodChain.context.object.kindName;
 		}
 		
 		// Launch Build game
 		else if (s.name == "two") {
-			game = new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
-			FoodChain.context.game = game.kindName;			
+			FoodChain.context.object = new FoodChain.BuildGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = FoodChain.context.object.kindName;			
 		}
 		
 		// Launch Play game
 		else if (s.name == "three") {
-			game = new FoodChain.PlayGame({level: 1}).renderInto(document.getElementById("body"));
-			FoodChain.context.game = game.kindName;
+			FoodChain.context.object = new FoodChain.PlayGame({level: 1}).renderInto(document.getElementById("body"));
+			FoodChain.context.game = FoodChain.context.object.kindName;
 		}		
 	}
 });

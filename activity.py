@@ -28,8 +28,9 @@ from datetime import date
 
 from enyo import Enyo
 
-from l10n import _fc_l10n
+from l10n import FoodChainLocalization
 
+_fc = FoodChainLocalization()
 
 # Init log
 _logger = logging.getLogger('roots-activity')
@@ -47,6 +48,7 @@ class FoodChainActivity(activity.Activity):
     def __init__(self, handle):
         """Set up the activity."""
         self.context = {}
+        self.enyo = None
         self.showconsole = False
         activity.Activity.__init__(self, handle)
 
@@ -69,7 +71,9 @@ class FoodChainActivity(activity.Activity):
 
     def init_context(self, args):
         "Init Javascript context sending information about localization and saved game"
-        self.enyo.send_message("localization", _fc_l10n)
+        self.languages.set_active(int(self.context['lang']));
+        _fc.set_locale(['','en','fr'][self.languages.get_active()])
+        self.enyo.send_message("localization", _fc.strings)
         self.enyo.send_message("load-context", self.context)
 
     def make_mainview(self):
@@ -138,6 +142,23 @@ class FoodChainActivity(activity.Activity):
         toolbar_box.toolbar.insert(share_button, -1)
         share_button.show()
 
+        liststore = Gtk.ListStore(str)
+        self.languages = languages = Gtk.ComboBox()
+        languages.set_model(liststore)
+        liststore.append(["Default"])
+        liststore.append(["English"])
+        liststore.append(["Français"])
+        cell = Gtk.CellRendererText()
+        languages.pack_end(cell, True)
+        languages.add_attribute(cell, 'text', 0)
+        lang_item = Gtk.ToolItem()
+        lang_item.add(languages)
+        languages.connect('changed', self.language_changed)
+        languages.set_active(0)
+        languages.show()
+        toolbar_box.toolbar.insert(lang_item, -1)
+        lang_item.show()
+
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
@@ -150,6 +171,14 @@ class FoodChainActivity(activity.Activity):
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
+
+
+    def language_changed(self, languages):
+        "Called when language is changed from the toolbar, send localization to Enyo"
+        if self.enyo is None:
+            return
+        _fc.set_locale(['','en','fr'][languages.get_active()])
+        self.enyo.send_message("localization", _fc.strings)
 
 
     def write_file(self, file_path):
@@ -165,6 +194,7 @@ class FoodChainActivity(activity.Activity):
             file.write(str(context['score'])+'\n')
             file.write(context['game']+'\n')
             file.write(str(context['level'])+'\n')
+            file.write(str(self.languages.get_active())+'\n')
         finally:
             file.close()
 
@@ -177,6 +207,7 @@ class FoodChainActivity(activity.Activity):
             self.context['score'] = file.readline().strip('\n')
             self.context['game'] = file.readline().strip('\n')
             self.context['level'] = file.readline().strip('\n')
+            self.context['lang'] = file.readline().strip('\n')
         finally:
             file.close()
 

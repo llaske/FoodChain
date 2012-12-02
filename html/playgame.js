@@ -102,10 +102,16 @@ enyo.kind({
 		this.nextaction = 0;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
 		this.createComponent({ name: "timerMonster", kind: "Timer", baseInterval: 500, onTriggered: "monsterEngine" }, {owner: this});
-		this.$.textlevel.setContent(__$FC("level"));
-		this.$.textscore.setContent(__$FC("score"));		
+		this.setLocale();		
 		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
+	},
+	
+	// Localization changed, update cards and string resource
+	setLocale: function() {
+		// Update string resources
+		this.$.textlevel.setContent(__$FC("level"));
+		this.$.textscore.setContent(__$FC("score"));	
 	},
 	
 	// Level changed, init board then start game

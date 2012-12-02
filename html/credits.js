@@ -7,16 +7,16 @@ enyo.kind({
 	components: [
 		{ components: [
 			{ classes: "two-column-credits", components: [
-				{ content: __$FC("concept"), classes: "credit-title" },
+				{ name: "concept", classes: "credit-title" },
 				{ content: "Lionel Laské", classes: "credit-name" },
-				{ content: __$FC("arts"), classes: "credit-title" },
+				{ name: "arts", classes: "credit-title" },
 				{ content: "Art4Apps (learn & build game)", classes: "credit-name" },
 				{ content: "Vicki Wenderlich (play game)", classes: "credit-name" },
 				{ content: "Mathafix (icon)", classes: "credit-name" },
 				{ content: "Ray Larabie (home font)", classes: "credit-name" },
-				{ content: __$FC("music"), classes: "credit-title" },
+				{ name: "music", classes: "credit-title" },
 				{ content: "part of Popcorn by Gershon Kingsley", classes: "credit-name" },	
-				{ content: __$FC("sound"), classes: "credit-title" },
+				{ name: "sound", classes: "credit-title" },
 				{ content: "Charel Sytze (applause)", classes: "credit-name" },	
 				{ content: "Unchaz (disappointment)", classes: "credit-name" },	
 				{ content: "Esformouse (frog)", classes: "credit-name" },	
@@ -40,8 +40,18 @@ enyo.kind({
 	create: function() {
 		this.inherited(arguments);
 		
+		this.setLocale();
+		
 		// Init soundtrack
 		this.soundtrack = "audio/popcorn";
+	},
+	
+	// Localization changed, update string resource
+	setLocale: function() {
+		this.$.concept.setContent(__$FC("concept")); 
+		this.$.arts.setContent(__$FC("arts"));
+		this.$.music.setContent(__$FC("music"));
+		this.$.sound.setContent(__$FC("sound"));
 	},
 	
 	// Image loaded, display elements of play game

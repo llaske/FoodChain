@@ -24,6 +24,12 @@ enyo.kind({
 		this.inherited(arguments);		
 	},
 	
+	// Localization changed, update card 
+	setLocale: function() {
+		this.cardnameChanged();
+		this.render();
+	},
+	
 	// Card setup
 	cardnameChanged: function() {
 		var image = "images/cards/"+this.cardname+".png";

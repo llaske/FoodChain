@@ -12,7 +12,8 @@ FoodChain = {};
 FoodChain.context = {
 	score: 0,
 	game: "",
-	level: 0
+	level: 0,
+	object: null
 };
 FoodChain.saveContext = function() {
 	FoodChain.sugar.sendMessage(
@@ -64,13 +65,19 @@ FoodChain.getConfig = function(name) {
 FoodChain.goHome = function() {
 	if (FoodChain.context.home != null) {
 		FoodChain.context.game = "";
+		FoodChain.context.home.setLocale()
 		FoodChain.context.home.renderInto(document.getElementById("body"));
 	}
 };
 
 // Sugar interface
+FoodChain.setLocale = function(dict) {
+	__$FC_l10n_set(dict);
+	if (FoodChain.context.object != null)
+		FoodChain.context.object.setLocale();
+}
 FoodChain.sugar = new Sugar();
-FoodChain.sugar.connect("localization", __$FC_l10n_set);
+FoodChain.sugar.connect("localization", FoodChain.setLocale);
 FoodChain.sugar.connect("save-context", FoodChain.saveContext);
 FoodChain.sugar.connect("load-context", FoodChain.loadContext);
 FoodChain.log = function(msg) {
@@ -106,4 +113,13 @@ FoodChain.createWithCondition = function(create, condition, set) {
 	if (!conditionValue)
 		FoodChain.log("WARNING: out of pre-requisite creating "+newObject.id);
 	return newObject;
+};
+
+// Test if two sound strings matchs ignoring audio directory
+FoodChain.soundMatch = function(s1, s2) {
+	var l1 = s1.length-1;
+	while (l1 > 0 && s1[l1] != '/') l1--;
+	var l2 = s2.length-1;
+	while (l2 > 0 && s2[l2] != '/') l2--;
+	return s1.substring(l1) == s2.substring(l2);
 };

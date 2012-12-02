@@ -48,10 +48,21 @@ enyo.kind({
 		this.previous = null;
 		this.mixed = null;
 		this.createComponent({ name: "timer", kind: "Timer", paused: true, onTriggered: "updateTimer" }, {owner: this});		
-		this.$.textlevel.setContent(__$FC("level"));
-		this.$.textscore.setContent(__$FC("score"));		
+		this.setLocale();
 		this.$.score.setContent(String("0000"+FoodChain.context.score).slice(-4));
 		this.levelChanged();
+	},
+	
+	// Localization changed, update cards and string resource
+	setLocale: function() {
+		// Update string resources
+		this.$.textlevel.setContent(__$FC("level"));
+		this.$.textscore.setContent(__$FC("score"));	
+
+		// Update cards
+		enyo.forEach(this.$.gamebox.getControls(), function(card) {
+			card.setLocale();
+		});		
 	},
 	
 	// Level changed, init board then start game
@@ -133,7 +144,7 @@ enyo.kind({
 			
 		// Display next card
 		for (var i = 0 ; i < this.cards.length ; i++ ) {
-			if (this.cards[i] != null && this.cards[i].sound == s) {
+			if (this.cards[i] != null && FoodChain.soundMatch(this.cards[i].sound,s)) {
 				this.cards[i] = null;
 				if (i+1 < this.cards.length) {
 					this.cards[i+1].show();
