@@ -261,7 +261,7 @@ enyo.kind({
 		for (var i = 0 ; i < FoodChain.playKeys.length ; i++ ) {
 			var playKey = FoodChain.playKeys[i];
 			if (playKey.dx == dx && playKey.dy == dy) {
-				e.charCode = playKey.key;
+				e.keyCode = playKey.key;
 				this.keyDown(s, e);
 				return;
 			}
