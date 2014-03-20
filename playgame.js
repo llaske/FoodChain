@@ -10,13 +10,13 @@ FoodChain.playLevels = [
 
 // Key to use
 FoodChain.playKeys = [
-	{ key: 75, heading: 0, dx: 1, dy: 0 },
+	{ key: 39, heading: 0, dx: 1, dy: 0 },
 	{ key: 107, heading: 0, dx: 1, dy: 0 },
-	{ key: 73, heading: 90, dx: 0, dy: -1 },
+	{ key: 38, heading: 90, dx: 0, dy: -1 },
 	{ key: 105, heading: 90, dx: 0, dy: -1 },
-	{ key: 74, heading: 0, dx: 1, dy: 0 },
+	{ key: 37, heading: 180, dx: -1, dy: 0 },
 	{ key: 106, heading: 180, dx: -1, dy: 0 },
-	{ key: 76, heading: 270, dx: 0, dy: 1 },
+	{ key: 40, heading: 270, dx: 0, dy: 1 },
 	{ key: 108, heading: 270, dx: 0, dy: 1 }
 ];
 
@@ -68,7 +68,7 @@ enyo.kind({
 			{ name: "home", kind: "ShadowButton", img: "home", classes: "home", ontap: "home" },
 
 			// End of sound event
-			{kind: "Signals", onEndOfSound: "endSound", onkeypress: "keyPressed"},
+			{kind: "Signals", onEndOfSound: "endSound", onkeydown: "keyDown"}, // Using keyDown to detect arrow keys
 			
 			// Preload all images for the game
 			{showing: false, components: [
@@ -261,16 +261,16 @@ enyo.kind({
 		for (var i = 0 ; i < FoodChain.playKeys.length ; i++ ) {
 			var playKey = FoodChain.playKeys[i];
 			if (playKey.dx == dx && playKey.dy == dy) {
-				e.charCode = playKey.key;
-				this.keyPressed(s, e);
+				e.keyCode = playKey.key;
+				this.keyDown(s, e);
 				return;
 			}
 		}
 	},
 	
 	// A key was pressed
-	keyPressed: function(s, e) {
-		var key = e.charCode;
+	keyDown: function(s, e) {
+		var key = e.keyCode;
 		
 		// Game paused
 		if (this.$.timer.paused)
