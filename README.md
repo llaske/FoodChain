@@ -49,3 +49,8 @@ Contains all images.
 ## /css
 
 Styles sheet for different platforms.
+
+
+# Contribution
+
+FoodChain activity is now part of [Sugarizer](http://github.com/llaske/Sugarizer). This repository is no longer maintain. If you want to contribute, send PR directly in Sugarizer. 
