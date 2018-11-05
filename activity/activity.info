@@ -4,3 +4,6 @@ activity_version = 4
 bundle_id = org.olpcfrance.FoodChain
 exec = sugar-activity-web
 icon = activity-icon
+summary = FoodChain is a pedagogical game to learn name of animals (word and pronunciation) and concept of food chains: who eats what? Who eats who?
+tags = Science
+repository = https://github.com/llaske/FoodChain
